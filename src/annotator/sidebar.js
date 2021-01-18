@@ -18,8 +18,16 @@ import BucketBar from './plugin/bucket-bar';
  * @prop {number} height
  */
 
+/**
+ * @typedef {{
+ *    eventTarget: Window| HTMLElement,
+ *    eventType: string,
+ *    listener: (event: any) => void;
+ * }} RegisteredListener
+ */
+
 // Minimum width to which the frame can be resized.
-const MIN_RESIZE = 280;
+export const MIN_RESIZE = 280;
 
 /**
  * Create the iframe that will load the sidebar application.
@@ -93,6 +101,9 @@ export default class Sidebar extends Guest {
     const sidebarFrame = createSidebarIframe(config);
     (frame || externalFrame).appendChild(sidebarFrame);
 
+    /** @type {RegisteredListener[]} */
+    this.registeredListeners = [];
+
     this.externalFrame = externalFrame;
     this.frame = frame;
     this.hypothesisSidebar = hypothesisSidebar;
@@ -123,7 +134,7 @@ export default class Sidebar extends Guest {
     }
 
     if (this.plugins.BucketBar) {
-      this.plugins.BucketBar.element.addEventListener('click', () =>
+      this._registerEvent(this.plugins.BucketBar.element, 'click', () =>
         this.show()
       );
     }
@@ -146,6 +157,8 @@ export default class Sidebar extends Guest {
       // not shown.
       this.toolbarWidth = 0;
     }
+
+    this._registerEvent(window, 'resize', () => this._onResize());
 
     this._gestureState = {
       // Initial position at the start of a drag/pan resize event (in pixels).
@@ -175,10 +188,28 @@ export default class Sidebar extends Guest {
   }
 
   destroy() {
+    this._unregisterEvents();
     this._hammerManager?.destroy();
     this.frame?.remove();
     this.hypothesisSidebar?.remove();
     super.destroy();
+  }
+
+  /**
+   * @param {Window|HTMLElement} eventTarget
+   * @param {string} eventType
+   * @param {(event: any) => void} listener
+   */
+  _registerEvent(eventTarget, eventType, listener) {
+    eventTarget.addEventListener(eventType, listener);
+    this.registeredListeners.push({ eventTarget, eventType, listener });
+  }
+
+  _unregisterEvents() {
+    this.registeredListeners.forEach(({ eventTarget, eventType, listener }) => {
+      eventTarget.removeEventListener(eventType, listener);
+    });
+    this.registeredListeners = [];
   }
 
   _setupSidebarEvents() {
@@ -222,11 +253,11 @@ export default class Sidebar extends Guest {
     const toggleButton = this.toolbar.sidebarToggleButton;
     if (toggleButton) {
       // Prevent any default gestures on the handle.
-      toggleButton.addEventListener('touchmove', e => e.preventDefault());
+      this._registerEvent(toggleButton, 'touchmove', e => e.preventDefault());
 
-      this._hammerManager = new Hammer.Manager(toggleButton)
-        // eslint-disable-next-line no-restricted-properties
-        .on('panstart panend panleft panright', this._onPan.bind(this));
+      this._hammerManager = new Hammer.Manager(
+        toggleButton
+      ).on('panstart panend panleft panright', event => this._onPan(event));
       this._hammerManager.add(
         new Hammer.Pan({ direction: Hammer.DIRECTION_HORIZONTAL })
       );
@@ -313,6 +344,19 @@ export default class Sidebar extends Guest {
       this.onLayoutChange(layoutState);
     }
     this.publish('sidebarLayoutChanged', [layoutState]);
+  }
+
+  /**
+   * Minimize the sidebar on window resize event
+   */
+  _onResize() {
+    if (this.toolbar.sidebarOpen === true) {
+      if (window.innerWidth < MIN_RESIZE) {
+        this.hide();
+      } else {
+        this.show();
+      }
+    }
   }
 
   _onPan(event) {

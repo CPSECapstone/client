@@ -1,6 +1,6 @@
 import events from '../../shared/bridge-events';
 
-import Sidebar from '../sidebar';
+import Sidebar, { MIN_RESIZE } from '../sidebar';
 import { $imports } from '../sidebar';
 
 const DEFAULT_WIDTH = 350;
@@ -184,7 +184,7 @@ describe('Sidebar', () => {
 
   describe('toolbar buttons', () => {
     it('shows or hides sidebar when toolbar button is clicked', () => {
-      const sidebar = createSidebar({});
+      const sidebar = createSidebar();
       sinon.stub(sidebar, 'show');
       sinon.stub(sidebar, 'hide');
 
@@ -196,7 +196,7 @@ describe('Sidebar', () => {
     });
 
     it('shows or hides highlights when toolbar button is clicked', () => {
-      const sidebar = createSidebar({});
+      const sidebar = createSidebar();
       sinon.stub(sidebar, 'setAllVisibleHighlights');
 
       FakeToolbarController.args[0][1].setHighlightsVisible(true);
@@ -208,7 +208,7 @@ describe('Sidebar', () => {
     });
 
     it('creates an annotation when toolbar button is clicked', () => {
-      const sidebar = createSidebar({});
+      const sidebar = createSidebar();
       sinon.stub(sidebar, 'createAnnotation');
 
       FakeToolbarController.args[0][1].createAnnotation();
@@ -322,7 +322,7 @@ describe('Sidebar', () => {
       });
 
       it('does not crash if there is no services', () => {
-        createSidebar({}); // No config.services
+        createSidebar(); // No config.services
         emitEvent(events.LOGIN_REQUESTED);
       });
 
@@ -382,7 +382,7 @@ describe('Sidebar', () => {
     let sidebar;
 
     beforeEach(() => {
-      sidebar = createSidebar({});
+      sidebar = createSidebar();
     });
 
     describe('panstart event', () => {
@@ -479,7 +479,7 @@ describe('Sidebar', () => {
     });
 
     it('does not show the sidebar if not configured to.', () => {
-      const sidebar = createSidebar({});
+      const sidebar = createSidebar();
       const show = sandbox.stub(sidebar, 'show');
       sidebar.publish('panelReady');
       assert.notCalled(show);
@@ -548,7 +548,7 @@ describe('Sidebar', () => {
 
   describe('#setAllVisibleHighlights', () =>
     it('sets the state through crossframe and emits', () => {
-      const sidebar = createSidebar({});
+      const sidebar = createSidebar();
       sidebar.setAllVisibleHighlights(true);
       assert.calledWith(fakeCrossFrame.call, 'setVisibleHighlights', true);
     }));
@@ -559,8 +559,51 @@ describe('Sidebar', () => {
   });
 
   it('shows toolbar controls when using the default theme', () => {
-    createSidebar({});
+    createSidebar();
     assert.equal(fakeToolbar.useMinimalControls, false);
+  });
+
+  it('hides the sidebar if window width is resized < MIN_RESIZE', () => {
+    const sidebar = createSidebar();
+    sidebar.show();
+    assert.isNotEmpty(sidebar.frame.style.marginLeft);
+
+    window.innerWidth = MIN_RESIZE - 1;
+    window.dispatchEvent(new Event('resize'));
+    assert.isEmpty(sidebar.frame.style.marginLeft);
+  });
+
+  it('updates marginLeft CSS style of the sidebar if sidebar is open and window width is resized > MIN_RESIZE', () => {
+    const sidebar = createSidebar();
+    window.innerWidth = MIN_RESIZE - 1;
+    window.dispatchEvent(new Event('resize'));
+    assert.isEmpty(sidebar.frame.style.marginLeft);
+
+    sidebar.show();
+    window.innerWidth = MIN_RESIZE;
+    window.dispatchEvent(new Event('resize'));
+    assert.isNotEmpty(sidebar.frame.style.marginLeft);
+  });
+
+  describe('register/unregister events', () => {
+    it('triggers registered event listener', () => {
+      const sidebar = createSidebar();
+      const listener = sinon.stub();
+      sidebar._registerEvent(window, 'resize', listener);
+
+      window.dispatchEvent(new Event('resize'));
+      assert.calledOnce(listener);
+    });
+
+    it('unregisters event listeners', () => {
+      const sidebar = createSidebar();
+      const listener = sinon.stub();
+      sidebar._registerEvent(window, 'resize', listener);
+      sidebar.destroy();
+
+      window.dispatchEvent(new Event('resize'));
+      assert.notCalled(listener);
+    });
   });
 
   describe('layout change notifier', () => {
