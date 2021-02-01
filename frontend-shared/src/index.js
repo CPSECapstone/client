@@ -1,3 +1,3 @@
 module.exports = {
-  ...require('./svg-icon'),
+  ...require('./components/SvgIcon'),
 };
