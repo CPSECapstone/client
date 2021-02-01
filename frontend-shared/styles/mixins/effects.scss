@@ -1,0 +1,9 @@
+
+/**
+ * Universal transition effect with fixed speed and ease.
+ */
+@mixin transition($properties...) {
+  transition-property: $properties;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-out;
+}

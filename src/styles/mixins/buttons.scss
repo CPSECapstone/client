@@ -18,6 +18,8 @@
  * And pass 'my-component-button' as the `className` prop to `Button`.
  */
 @use "@hypothesis/frontend-shared/styles/mixins/focus";
+@use "@hypothesis/frontend-shared/styles/mixins/effects";
+
 
 @use "./layout";
 @use "./utils";
@@ -45,11 +47,11 @@
 @mixin button {
   @include reset-native-btn-styles;
   @include layout.row(center, center);
+  @include effects.transition(color, background-color, box-shadow);
   padding: 0.5em;
   border-radius: var.$border-radius;
   border: none;
-  transition: color 0.2s ease-out, background-color 0.2s ease-out,
-    opacity 0.2s ease-out;
+  
 
   // Icon
   svg {

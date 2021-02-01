@@ -1,3 +1,17 @@
+@use './effects';
+@use '../variables' as var;
+
+/**
+ * Use non-keyboard interactive elements such as <a> tags
+ */
+@mixin outline {
+  @include effects.transition(box-shadow);
+  &:focus {
+    outline: 0;
+    box-shadow: 0 0 0 2px var.$color-focus-outline inset;
+  }
+}
+
 /**
  * Display an outline on an element only when it has keyboard focus.
  *
@@ -8,6 +22,7 @@
  * [2] https://github.com/WICG/focus-visible
  */
 @mixin outline-on-keyboard-focus {
+  @include outline;
   // Selector for browsers using JS polyfill, which adds the "focus-visible"
   // class to a keyboard-focused element.
   &:focus:not(.focus-visible) {

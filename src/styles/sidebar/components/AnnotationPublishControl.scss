@@ -1,3 +1,5 @@
+@use "@hypothesis/frontend-shared/styles/mixins/effects";
+
 @use "../../mixins/buttons";
 @use "../../mixins/forms";
 @use "../../mixins/layout";
@@ -52,6 +54,7 @@
   // Safari. See https://github.com/hypothesis/client/issues/2302
   &__menu-wrapper {
     @include layout.row;
+    @include effects.transition('background-color');
     // Add border radius to the right to match the left side of the primary button
     border-top-right-radius: var.$border-radius;
     border-bottom-right-radius: var.$border-radius;

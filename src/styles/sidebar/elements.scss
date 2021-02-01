@@ -1,9 +1,14 @@
+@use "@hypothesis/frontend-shared/styles/mixins/focus";
+
 @use "../variables" as var;
 
 // basic standard styling for elements
 a {
+  @include focus.outline;
   color: var.$color-link;
   text-decoration: none;
+  // Give links a radius so the :focus outline effect renders the same here as it does on a button.
+  border-radius: var.$border-radius;
 }
 
 a:active,

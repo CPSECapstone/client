@@ -1,3 +1,5 @@
+@use "@hypothesis/frontend-shared/styles/mixins/effects";
+
 @use "../../mixins/forms";
 @use "../../mixins/layout";
 @use "../../variables" as var;
@@ -14,6 +16,7 @@
 
 .SearchInput__input {
   @include forms.form-input;
+  @include effects.transition(max-width, padding-left, box-shadow);
 
   flex-grow: 1;
   order: 1;
@@ -28,7 +31,7 @@
   // `max-width` property.
   max-width: 0px;
 
-  transition: max-width 0.3s ease-out, padding-left 0.3s ease-out;
+  //transition: max-width 0.3s ease-out, padding-left 0.3s ease-out, box-shadow, 0.2 ease-out
 
   &:disabled {
     background: none;

@@ -5,4 +5,8 @@
     color: var.$color-text;
     font-weight: bold;
   }
+
+  &__link {
+    display: inline-block;
+  }
 }
