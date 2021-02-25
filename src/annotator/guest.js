@@ -16,6 +16,7 @@ import {
 import * as rangeUtil from './range-util';
 import { SelectionObserver } from './selection-observer';
 import { normalizeURI } from './util/url';
+import { DoodleCanvas } from '../doodle/doodleCanvas';
 
 /**
  * @typedef {import('../types/annotator').AnnotationData} AnnotationData
@@ -122,6 +123,9 @@ export default class Guest extends Delegator {
 
     /** @type {ToolbarController|null} */
     this.toolbar = null;
+
+    /** @type {DoodleCanvas|null}* } */
+    this.doodleCanvas = null;
 
     this.adderToolbar = document.createElement('hypothesis-adder');
     this.adderToolbar.style.display = 'none';
@@ -349,6 +353,10 @@ export default class Guest extends Delegator {
     crossframe.on('setVisibleHighlights', state => {
       this.setVisibleHighlights(state);
     });
+
+    crossframe.on('setDoodleability', state => {
+      this.setDoodleability(state);
+    })
   }
 
   destroy() {
@@ -708,6 +716,21 @@ export default class Guest extends Delegator {
     this.visibleHighlights = shouldShowHighlights;
     if (this.toolbar) {
       this.toolbar.highlightsVisible = shouldShowHighlights;
+    }
+  }
+
+  /**
+   * Set whether the document can be doodled on
+   * 
+   * @param {boolean} shouldBeDoodleable
+   */
+  setDoodleability(shouldBeDoodleable) {
+    if(this.doodleCanvas) {
+      this.doodleCanvas.doodleable = !this.doodleCanvas.doodleable;
+      console.log("just set doodleable to: ", this.doodleCanvas.doodleable);
+    }
+    else {
+      alert("DOODLE CANVAS IS NULL!!");
     }
   }
 }

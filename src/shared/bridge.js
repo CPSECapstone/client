@@ -78,6 +78,7 @@ export default class Bridge {
    * @return {Promise<any[]>} - Array of results, one per connected frame
    */
   call(method, ...args) {
+    console.log("BRIDGE: called", method);
     let cb;
     if (typeof args[args.length - 1] === 'function') {
       cb = args[args.length - 1];

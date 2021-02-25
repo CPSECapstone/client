@@ -11,6 +11,7 @@
       // This is the origin of the "h" service that delivers the client.
       import { CLIENT_ORIGIN } from "../client.js";
 
+      console.log("client origin: ", CLIENT_ORIGIN);
       window.addEventListener('message', event => {
         // Listen for a JSON-RPC "requestConfig" message from the client.
         // See https://www.jsonrpc.org
