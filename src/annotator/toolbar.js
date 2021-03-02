@@ -28,6 +28,8 @@ export class ToolbarController {
 
     this._useMinimalControls = false;
 
+    this._drawingToolbar = false;
+
     /** @type {'annotation'|'note'} */
     this._newAnnotationType = 'note';
 
@@ -38,6 +40,10 @@ export class ToolbarController {
     this._toggleSidebar = () => setSidebarOpen(!this._sidebarOpen);
     this._toggleHighlights = () =>
       setHighlightsVisible(!this._highlightsVisible);
+    this._toggleDoodleToolbar = () => {
+      this._drawingToolbar = !this._drawingToolbar;
+      this.render();
+    }
     this._createAnnotation = () => {
       createAnnotation();
       setSidebarOpen(true);
@@ -125,6 +131,8 @@ export class ToolbarController {
         toggleSidebar={this._toggleSidebar}
         toggleSidebarRef={this._sidebarToggleButton}
         useMinimalControls={this.useMinimalControls}
+        drawingToolbarActivated={this._drawingToolbar}
+        drawingToolbarToggle={this._toggleDoodleToolbar}
       />,
       this._container
     );
