@@ -63,7 +63,7 @@ export class DoodleController {
             size={this._size}
             tool={this._tool}
             active={this._doodleable} />,
-            this._container
+            document.body
         );
     }
   }

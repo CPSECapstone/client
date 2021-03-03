@@ -61,12 +61,13 @@ const DoodleCanvas = ({tool, size, active, attachedElement}) => {
             position: "absolute",
             top: attachedElement.getBoundingClientRect().top + window.scrollY,
             left: attachedElement.getBoundingClientRect().left + window.scrollX,
+            zIndex: 9999, //Need the doodle canvas to be on top of any website content
             backgroundColor: active ? "rgba(0, 0, 0, 0.2)" : undefined,
             pointerEvents: active ? undefined : "none"
         }}>
             <Canvas 
             width={attachedElement.getBoundingClientRect().width}
-            height={10000}//{attachedElement.getBoundingClientRect().height}
+            height={Math.min(attachedElement.getBoundingClientRect().height, 10000) /*Canvas starts to lag over 10k, doesnt work over 32k*/}
             handleMouseDown={handleMouseDown}
             handleMouseUp={handleMouseUp}
             handleMouseLeave={handleMouseLeave}
