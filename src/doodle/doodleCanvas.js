@@ -21,7 +21,7 @@ import propTypes from 'prop-types';
  * @param {DoodleCanvasProps} props
  */
 const DoodleCanvas = ({ tool, size, active, attachedElement }) => {
-  const [lines, setLines] = useState([]);
+  const [lines, setLines] = useState(/** @type {array} */ ([]));
   const [isDrawing, setIsDrawing] = useState(false);
 
   const handleMouseDown = e => {
@@ -58,8 +58,8 @@ const DoodleCanvas = ({ tool, size, active, attachedElement }) => {
 
     const newLine = {
       tool: curLine.tool,
-      points: [[xPos, yPos], ...curLine.points],
       color: curLine.color,
+      points: [[xPos, yPos], ...curLine.points],
     };
 
     setLines([newLine, ...rest]);

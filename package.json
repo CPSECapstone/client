@@ -132,7 +132,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "tsc --build src/tsconfig.json && lint-staged"
     }
   },
   "lint-staged": {

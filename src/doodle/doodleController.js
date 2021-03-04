@@ -3,13 +3,13 @@ import { DoodleCanvas } from './doodleCanvas';
 
 export class DoodleController {
   /**
-   * @param {HTMLElement} container - Element into which the toolbar is rendered
+   * @param {HTMLElement | null} container - Element into which the toolbar is rendered
    * @param {any} options
    */
   constructor(container, options) {
     const { tool, size } = options;
 
-    this._container = container;
+    this._container = container === null ? document.body : container;
     this._tool = tool;
     this._size = size;
 
