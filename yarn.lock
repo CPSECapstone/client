@@ -5052,6 +5052,11 @@ kind-of@^6.0.0, kind-of@^6.0.2:
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.3.tgz#07c05034a6c349fa06e24fa35aa76db4580ce4dd"
   integrity sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==
 
+konva@^7.2.3:
+  version "7.2.3"
+  resolved "https://registry.yarnpkg.com/konva/-/konva-7.2.3.tgz#cf0878d58f88caa7dc42935cd5985ec955f47c3b"
+  integrity sha512-WOVfDeu4yGdAv4ltv2MkT2E+ypHg8l6jA9oULF6hC2G3JgENe22K//AhFSW4sppeh65KFu5l4EOxScX5SvA5Vg==
+
 labeled-stream-splicer@^2.0.0:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/labeled-stream-splicer/-/labeled-stream-splicer-2.0.2.tgz#42a41a16abcd46fd046306cf4f2c3576fffb1c21"

@@ -1,6 +1,5 @@
-import Konva from 'konva';
 import { createElement } from 'preact';
-import { useState, useRef, useEffect} from 'preact/hooks';
+import {useRef, useEffect} from 'preact/hooks';
 
 //TODO not sure how to enforce this type...
 /**
@@ -26,7 +25,6 @@ const Canvas = ({width, height, handleMouseDown, handleMouseUp, handleMouseMove,
             ctx.globalCompositeOperation="source-over";
             ctx.lineWidth = 5;
             ctx.strokeStyle = line.color;
-            console.log("line: ", line);
         }
         else {
             ctx.globalCompositeOperation="destination-out";

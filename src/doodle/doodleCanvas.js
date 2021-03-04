@@ -1,22 +1,17 @@
 import { render, createElement } from 'preact';
 import { useState, useEffect} from 'preact/hooks';
-import {Canvas} from './konvaFuncs';
+import {Canvas} from './canvas';
 
 
 const DoodleCanvas = ({tool, size, active, attachedElement}) => {
-    //TODO: set up lines so that they scroll into and out of view using window scroll and offset coordinates
-
     const [lines, setLines] = useState([]);
     const [isDrawing, setIsDrawing] = useState(false);
 
 
     const handleMouseDown = e => {
         setIsDrawing(true);
-        // TODO remove below line, just for testing without adding a button.
-        const curTool = lines.length % 2 == 0 ? 'eraser' : 'pen';
-        // TODO why is it ignoring color?
         setLines([{
-            tool: curTool, 
+            tool: 'pen', 
             color: 'red', 
             points: [[e.offsetX, e.offsetY]]
         }, ...lines]);

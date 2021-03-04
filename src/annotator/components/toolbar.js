@@ -1,7 +1,6 @@
 import { SvgIcon } from '@hypothesis/frontend-shared';
 import propTypes from 'prop-types';
-import { createElement, render } from 'preact';
-import { Doodle } from '../../doodle/doodleCanvas';
+import { createElement} from 'preact';
 
 /**
  * @param {Object} props
@@ -26,7 +25,6 @@ function ToolbarButton({
     // Stop event from propagating up to the document and being treated as a
     // click on document content, causing the sidebar to close.
     event.stopPropagation();
-    console.log(onClick);
     onClick();
   };
 

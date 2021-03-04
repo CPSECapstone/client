@@ -139,7 +139,7 @@ export default class Sidebar extends Guest {
     });
     this.toolbar.useMinimalControls = config.theme === 'clean';
 
-    this.doodleCanvas = new DoodleController(document.getElementById('main-content'), {
+    this.doodleCanvasController = new DoodleController(document.getElementById('main-content'), {
       tool: 'pen',
       size: 5
     })
@@ -424,8 +424,6 @@ export default class Sidebar extends Guest {
    * @param {boolean} shouldBeDoodleable
    */
   setAllDoodleability(shouldBeDoodleable) {
-    console.log("publishing 'setDoodleability' message with value: ", shouldBeDoodleable);
     this.crossframe.call('setDoodleability', shouldBeDoodleable);
-    console.log("called");
   }
 }
