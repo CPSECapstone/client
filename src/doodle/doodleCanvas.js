@@ -64,7 +64,7 @@ const DoodleCanvas = ({ tool, size, active, attachedElement }) => {
       <Canvas
         width={attachedElement.getBoundingClientRect().width}
         height={
-    Math.min(
+Math.min(
     attachedElement.getBoundingClientRect().height,
             10000
           ) /*Canvas starts to lag over 10k, doesnt work over 32k*/
