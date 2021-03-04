@@ -356,7 +356,7 @@ export default class Guest extends Delegator {
 
     crossframe.on('setDoodleability', state => {
       this.setDoodleability(state);
-    })
+    });
   }
 
   destroy() {
@@ -721,12 +721,13 @@ export default class Guest extends Delegator {
 
   /**
    * Set whether the document can be doodled on
-   * 
+   *
    * @param {boolean} shouldBeDoodleable
    */
   setDoodleability(shouldBeDoodleable) {
-    if(this.doodleCanvasController) {
-      this.doodleCanvasController.doodleable = !this.doodleCanvasController.doodleable;
+    if (this.doodleCanvasController) {
+      this.doodleCanvasController.doodleable = !this.doodleCanvasController
+        .doodleable;
     }
   }
 }

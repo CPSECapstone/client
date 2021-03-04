@@ -22,7 +22,12 @@ export class ToolbarController {
    * @param {ToolbarOptions} options
    */
   constructor(container, options) {
-    const { createAnnotation, setSidebarOpen, setHighlightsVisible, setUserCanDoodle } = options;
+    const {
+      createAnnotation,
+      setSidebarOpen,
+      setHighlightsVisible,
+      setUserCanDoodle,
+    } = options;
 
     this._container = container;
     this._container.className = 'annotator-toolbar';
@@ -40,7 +45,7 @@ export class ToolbarController {
     this._toggleSidebar = () => setSidebarOpen(!this._sidebarOpen);
     this._toggleHighlights = () =>
       setHighlightsVisible(!this._highlightsVisible);
-    this._toggleDoodleability = () => setUserCanDoodle(!this._doodleable)
+    this._toggleDoodleability = () => setUserCanDoodle(!this._doodleable);
     this._createAnnotation = () => {
       createAnnotation();
       setSidebarOpen(true);

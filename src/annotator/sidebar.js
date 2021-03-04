@@ -139,10 +139,13 @@ export default class Sidebar extends Guest {
     });
     this.toolbar.useMinimalControls = config.theme === 'clean';
 
-    this.doodleCanvasController = new DoodleController(document.getElementById('main-content'), {
-      tool: 'pen',
-      size: 5
-    })
+    this.doodleCanvasController = new DoodleController(
+      document.getElementById('main-content'),
+      {
+        tool: 'pen',
+        size: 5,
+      }
+    );
 
     if (this.frame) {
       // If using our own container frame for the sidebar, add the toolbar to it.
@@ -420,7 +423,7 @@ export default class Sidebar extends Guest {
 
   /**
    * (CreativeNTR) Toggle doodle ability on and off
-   * 
+   *
    * @param {boolean} shouldBeDoodleable
    */
   setAllDoodleability(shouldBeDoodleable) {

@@ -1,6 +1,6 @@
 import { SvgIcon } from '@hypothesis/frontend-shared';
 import propTypes from 'prop-types';
-import { createElement} from 'preact';
+import { createElement } from 'preact';
 
 /**
  * @param {Object} props
