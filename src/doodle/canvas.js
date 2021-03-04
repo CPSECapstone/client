@@ -60,7 +60,6 @@ const Canvas = ({
 
   return (
     <canvas
-      /*style={{width: width, height: height}}*/
       width={width}
       height={height}
       ref={canvasRef}

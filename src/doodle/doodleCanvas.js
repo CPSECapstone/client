@@ -93,7 +93,7 @@ const DoodleCanvas = ({ tool, size, active, attachedElement }) => {
         handleMouseLeave={handleMouseLeave}
         handleMouseMove={handleMouseMove}
         lines={lines}
-       />
+      />
     </div>
   );
 };
