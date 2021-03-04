@@ -102,7 +102,7 @@ DoodleCanvas.propTypes = {
   tool: propTypes.string.isRequired,
   size: propTypes.number.isRequired,
   active: propTypes.bool.isRequired,
-  attachedElement: propTypes.HTMLElement.isRequired,
+  attachedElement: propTypes.any.isRequired,
 };
 
 export { DoodleCanvas };

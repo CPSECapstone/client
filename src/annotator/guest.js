@@ -16,7 +16,6 @@ import {
 import * as rangeUtil from './range-util';
 import { SelectionObserver } from './selection-observer';
 import { normalizeURI } from './util/url';
-import { DoodleController } from '../doodle/doodleController';
 
 /**
  * @typedef {import('../types/annotator').AnnotationData} AnnotationData
@@ -124,7 +123,7 @@ export default class Guest extends Delegator {
     /** @type {ToolbarController|null} */
     this.toolbar = null;
 
-    /** @type {DoodleController|null}* } */
+    /** TODO add this type back while still passing linter {DoodleController|null}* } */
     this.doodleCanvasController = null;
 
     this.adderToolbar = document.createElement('hypothesis-adder');
@@ -726,8 +725,7 @@ export default class Guest extends Delegator {
    */
   setDoodleability(shouldBeDoodleable) {
     if (this.doodleCanvasController) {
-      this.doodleCanvasController.doodleable = !this.doodleCanvasController
-        .doodleable;
+      this.doodleCanvasController.doodleable = shouldBeDoodleable;
     }
   }
 }

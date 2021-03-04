@@ -155,6 +155,7 @@ Toolbar.propTypes = {
   showHighlights: propTypes.bool.isRequired,
   toggleHighlights: propTypes.func.isRequired,
   toggleSidebar: propTypes.func.isRequired,
+  toggleDoodleability: propTypes.func.isRequired,
   toggleSidebarRef: propTypes.any,
   useMinimalControls: propTypes.bool,
 };

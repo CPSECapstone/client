@@ -45,7 +45,10 @@ export class ToolbarController {
     this._toggleSidebar = () => setSidebarOpen(!this._sidebarOpen);
     this._toggleHighlights = () =>
       setHighlightsVisible(!this._highlightsVisible);
-    this._toggleDoodleability = () => setUserCanDoodle(!this._doodleable);
+    this._toggleDoodleability = () => {
+      this._doodleable = !this._doodleable;
+      setUserCanDoodle(this._doodleable);
+    };
     this._createAnnotation = () => {
       createAnnotation();
       setSidebarOpen(true);
