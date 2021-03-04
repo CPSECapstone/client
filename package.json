@@ -57,7 +57,7 @@
     "gulp-replace": "^1.0.0",
     "gulp-sourcemaps": "^3.0.0",
     "hammerjs": "^2.0.4",
-    "husky": "^5.1.3",
+    "husky": "=4",
     "karma": "^6.0.1",
     "karma-browserify": "^8.0.0",
     "karma-chai": "^0.1.0",
@@ -136,6 +136,7 @@
     }
   },
   "lint-staged": {
-    "*.js": "prettier --write"
+    "*.js": "eslint --cache --fix",
+    "*.{js,scss}": "prettier --write"
   }
 }
