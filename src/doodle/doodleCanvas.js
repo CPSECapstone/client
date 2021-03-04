@@ -1,7 +1,25 @@
-import { render, createElement } from 'preact';
-import { useState, useEffect } from 'preact/hooks';
+import { createElement } from 'preact';
+import { useState } from 'preact/hooks';
 import { Canvas } from './canvas';
+import propTypes from 'prop-types';
 
+/**
+ * @typedef DoodleCanvasProps
+ * @prop {string} tool - The name of the tool that is being used. One of {'pen'|'eraser'}.
+ * @prop {number} size - The size of the brush.
+ * @prop {boolean} active - Whether the canvas can be doodled on at this time
+ * @prop {HTMLElement} attachedElement - Which element the DoodleCanvas should cover.
+ */
+
+/**
+ * Component that renders icons using inline `<svg>` elements.
+ * This enables their appearance to be customized via CSS.
+ *
+ * This matches the way we do icons on the website, see
+ * https://github.com/hypothesis/h/pull/3675
+ *
+ * @param {DoodleCanvasProps} props
+ */
 const DoodleCanvas = ({ tool, size, active, attachedElement }) => {
   const [lines, setLines] = useState([]);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -10,19 +28,20 @@ const DoodleCanvas = ({ tool, size, active, attachedElement }) => {
     setIsDrawing(true);
     setLines([
       {
-        tool: 'pen',
+        tool: tool,
         color: 'red',
+        size: size,
         points: [[e.offsetX, e.offsetY]],
       },
       ...lines,
     ]);
   };
 
-  const handleMouseUp = e => {
+  const handleMouseUp = () => {
     setIsDrawing(false);
   };
 
-  const handleMouseLeave = e => {
+  const handleMouseLeave = () => {
     setIsDrawing(false);
   };
 
@@ -64,8 +83,8 @@ const DoodleCanvas = ({ tool, size, active, attachedElement }) => {
       <Canvas
         width={attachedElement.getBoundingClientRect().width}
         height={
-Math.min(
-    attachedElement.getBoundingClientRect().height,
+          Math.min(
+            attachedElement.getBoundingClientRect().height,
             10000
           ) /*Canvas starts to lag over 10k, doesnt work over 32k*/
         }
@@ -74,9 +93,16 @@ Math.min(
         handleMouseLeave={handleMouseLeave}
         handleMouseMove={handleMouseMove}
         lines={lines}
-      ></Canvas>
+       />
     </div>
   );
+};
+
+DoodleCanvas.propTypes = {
+  tool: propTypes.string.isRequired,
+  size: propTypes.number.isRequired,
+  active: propTypes.bool.isRequired,
+  attachedElement: propTypes.HTMLElement.isRequired,
 };
 
 export { DoodleCanvas };

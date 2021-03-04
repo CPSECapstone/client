@@ -1,5 +1,6 @@
 import { createElement } from 'preact';
 import { useRef, useEffect } from 'preact/hooks';
+import propTypes from 'prop-types';
 
 //TODO not sure how to enforce this type...
 /**
@@ -28,9 +29,9 @@ const Canvas = ({
     ctx.beginPath();
     ctx.moveTo(startX, startY);
 
-    if (line.tool == 'pen') {
+    if (line.tool === 'pen') {
       ctx.globalCompositeOperation = 'source-over';
-      ctx.lineWidth = 5;
+      ctx.lineWidth = line.size;
       ctx.strokeStyle = line.color;
     } else {
       ctx.globalCompositeOperation = 'destination-out';
@@ -69,6 +70,16 @@ const Canvas = ({
       onMouseLeave={handleMouseLeave}
     />
   );
+};
+
+Canvas.propTypes = {
+  width: propTypes.number.isRequired,
+  height: propTypes.number.isRequired,
+  handleMouseDown: propTypes.func.isRequired,
+  handleMouseUp: propTypes.func.isRequired,
+  handleMouseMove: propTypes.func.isRequired,
+  handleMouseLeave: propTypes.func.isRequired,
+  lines: propTypes.array.isRequired,
 };
 
 export { Canvas };

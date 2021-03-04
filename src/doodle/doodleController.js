@@ -45,6 +45,7 @@ export class DoodleController {
   /**
    * Update the toolbar to reflect whether highlights are currently visible.
    */
+
   set doodleable(visible) {
     this._doodleable = visible;
     this.render();
