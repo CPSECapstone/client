@@ -17,8 +17,6 @@ import * as rangeUtil from './range-util';
 import { SelectionObserver } from './selection-observer';
 import { normalizeURI } from './util/url';
 
-//import _variables from '../styles/_variables.scss';
-
 /**
  * @typedef {import('../types/annotator').AnnotationData} AnnotationData
  * @typedef {import('../types/annotator').Anchor} Anchor
@@ -444,12 +442,10 @@ export default class Guest extends Delegator {
      */
     const highlight = anchor => {
       const range = resolveAnchor(anchor);
-      const colorList = ['#f0c1b3', '#acc5c8', '#93b8d3', '#eed8ae']
       if (!range) {
         return anchor;
       }
 
-		//also pass it the color to set it to, where get the color?
       const highlights = /** @type {AnnotationHighlight[]} */ (highlightRange(
         range, Math.random() * (6 - 1) + 1
       ));
