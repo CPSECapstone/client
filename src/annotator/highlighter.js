@@ -270,7 +270,6 @@ export function highlightRange(
     if (colorNum != -1) {
       highlightEl.classList.toggle('user-color' + Math.round(colorNum), true);
     }
-      
 
     nodes[0].parentNode.replaceChild(highlightEl, nodes[0]);
     nodes.forEach(node => highlightEl.appendChild(node));
