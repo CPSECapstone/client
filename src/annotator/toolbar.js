@@ -8,6 +8,7 @@ import Toolbar from './components/toolbar';
  * @prop {(open: boolean) => any} setSidebarOpen
  * @prop {(visible: boolean) => any} setHighlightsVisible
  * @prop {(doodleable: boolean) => any} setUserCanDoodle
+ * @prop {(doodleable: boolean) => any} setDoodleOptions
  */
 
 /**
@@ -27,6 +28,7 @@ export class ToolbarController {
       setSidebarOpen,
       setHighlightsVisible,
       setUserCanDoodle,
+      setDoodleOptions,
     } = options;
 
     this._container = container;
@@ -51,17 +53,14 @@ export class ToolbarController {
       this._doodleable = !this._doodleable;
       setUserCanDoodle(this._doodleable);
     };
-    this._setDoodleabilityOn = () => {
-      this._doodleable = true;
-      setUserCanDoodle(this._doodleable);
-    };
-    this._setDoodleabilityOff = () => {
-      this._doodleable = false;
-      setUserCanDoodle(this._doodleable);
-    };
     this._toggleDoodleToolbar = () => {
       this._drawingToolbar = !this._drawingToolbar;
+      this._doodleable = this._drawingToolbar;
+      setUserCanDoodle(this._doodleable);
       this.render();
+    };
+    this._setDoodleOptions = options => {
+      setDoodleOptions(options);
     };
     this._createAnnotation = () => {
       createAnnotation();
@@ -150,8 +149,7 @@ export class ToolbarController {
         toggleSidebar={this._toggleSidebar}
         toggleSidebarRef={this._sidebarToggleButton}
         useMinimalControls={this.useMinimalControls}
-        setDoodleabilityOn={this._setDoodleabilityOn}
-        setDoodleabilityOff={this._setDoodleabilityOff}
+        setDoodleOptions={this._setDoodleOptions}
         drawingToolbarActivated={this._drawingToolbar}
         drawingToolbarToggle={this._toggleDoodleToolbar}
       />,
