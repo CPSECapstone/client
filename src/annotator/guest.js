@@ -733,7 +733,7 @@ export default class Guest extends Delegator {
       this.doodleCanvasController.doodleable = shouldBeDoodleable;
     }
   }
-    
+
   /**
    * Set the brush options for doodlin
    *

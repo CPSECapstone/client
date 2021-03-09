@@ -2,7 +2,6 @@ import { createElement } from 'preact';
 import { useRef, useEffect } from 'preact/hooks';
 import propTypes from 'prop-types';
 
-
 const Canvas = ({
   width,
   height,
