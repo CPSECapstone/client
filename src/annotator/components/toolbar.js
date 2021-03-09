@@ -81,6 +81,9 @@ ToolbarButton.propTypes = {
  * @prop {boolean} [useMinimalControls] -
  *   If true, all controls are hidden except for the "Close sidebar" button
  *   when the sidebar is open.
+ * @prop {boolean} [drawingToolbarActivated]
+ *
+ * @prop {() => any} drawingToolbarToggle
  */
 
 /**
@@ -100,51 +103,101 @@ export default function Toolbar({
   toggleDoodleability,
   toggleSidebarRef,
   useMinimalControls = false,
+  drawingToolbarActivated,
+  drawingToolbarToggle,
 }) {
-  return (
-    <div>
-      {useMinimalControls && isSidebarOpen && (
-        <ToolbarButton
-          className="annotator-toolbar__sidebar-close"
-          label="Close annotation sidebar"
-          icon="cancel"
-          onClick={closeSidebar}
-        />
-      )}
-      {!useMinimalControls && (
-        <ToolbarButton
-          className="annotator-toolbar__sidebar-toggle"
-          buttonRef={toggleSidebarRef}
-          label="Annotation sidebar"
-          icon={isSidebarOpen ? 'caret-right' : 'caret-left'}
-          expanded={isSidebarOpen}
-          onClick={toggleSidebar}
-        />
-      )}
-      {!useMinimalControls && (
-        <div className="annotator-toolbar-buttonbar">
+  if (!drawingToolbarActivated) {
+    return (
+      <div>
+        {useMinimalControls && isSidebarOpen && (
           <ToolbarButton
-            label="Show highlights"
-            icon={showHighlights ? 'show' : 'hide'}
-            selected={showHighlights}
-            onClick={toggleHighlights}
+            className="annotator-toolbar__sidebar-close"
+            label="Close annotation sidebar"
+            icon="cancel"
+            onClick={closeSidebar}
           />
+        )}
+        {!useMinimalControls && (
           <ToolbarButton
-            label={
-              newAnnotationType === 'note' ? 'New page note' : 'New annotation'
-            }
-            icon={newAnnotationType === 'note' ? 'note' : 'annotate'}
-            onClick={createAnnotation}
+            className="annotator-toolbar__sidebar-toggle"
+            buttonRef={toggleSidebarRef}
+            label="Annotation sidebar"
+            icon={isSidebarOpen ? 'caret-right' : 'caret-left'}
+            expanded={isSidebarOpen}
+            onClick={toggleSidebar}
           />
+        )}
+        {!useMinimalControls && (
+          <div className="annotator-toolbar-buttonbar">
+            <ToolbarButton
+              label="Show highlights"
+              icon={showHighlights ? 'show' : 'hide'}
+              selected={showHighlights}
+              onClick={toggleHighlights}
+            />
+            <ToolbarButton
+              label={
+                newAnnotationType === 'note'
+                  ? 'New page note'
+                  : 'New annotation'
+              }
+              icon={newAnnotationType === 'note' ? 'note' : 'annotate'}
+              onClick={createAnnotation}
+            />
+            <ToolbarButton
+              label="New Doodle"
+              icon="doodle"
+              onClick={drawingToolbarToggle}
+            />
+          </div>
+        )}
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        {useMinimalControls && isSidebarOpen && (
           <ToolbarButton
-            label={'New Doodle'}
-            icon={'doodle'}
-            onClick={toggleDoodleability}
+            className="annotator-toolbar__sidebar-close"
+            label="Close annotation sidebar"
+            icon="cancel"
+            onClick={closeSidebar}
           />
-        </div>
-      )}
-    </div>
-  );
+        )}
+        {!useMinimalControls && (
+          <ToolbarButton
+            className="annotator-toolbar__sidebar-toggle"
+            buttonRef={toggleSidebarRef}
+            label="Annotation sidebar"
+            icon={isSidebarOpen ? 'caret-right' : 'caret-left'}
+            expanded={isSidebarOpen}
+            onClick={toggleSidebar}
+          />
+        )}
+        {!useMinimalControls && (
+          <div className="annotator-toolbar-buttonbar">
+            <ToolbarButton
+              label="Stop doodle"
+              icon="close"
+              onClick={drawingToolbarToggle}
+            />
+            <ToolbarButton
+              label="Pen"
+              icon="pen"
+              onClick={toggleDoodleability}
+            />
+            <ToolbarButton
+              label="Eraser"
+              icon="erase"
+              onClick={() => {
+                alert('This would erase!');
+              }}
+            />
+          </div>
+        )}
+      </div>
+    );
+  }
 }
 
 Toolbar.propTypes = {
@@ -158,4 +211,6 @@ Toolbar.propTypes = {
   toggleDoodleability: propTypes.func.isRequired,
   toggleSidebarRef: propTypes.any,
   useMinimalControls: propTypes.bool,
+  drawingToolbarActivated: propTypes.bool,
+  drawingToolbarToggle: propTypes.func.isRequired,
 };
