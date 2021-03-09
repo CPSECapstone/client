@@ -434,7 +434,7 @@ export default class Sidebar extends Guest {
   /**
    * (CreativeNTR) Set the doodle options
    *
-   * @param {boolean} options
+   * @param {object} options
    */
   setAllDoodleOptions(options) {
     this.crossframe.call('setDoodleOptions', options);

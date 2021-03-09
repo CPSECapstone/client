@@ -2,6 +2,7 @@ import { createElement } from 'preact';
 import { useRef, useEffect } from 'preact/hooks';
 import propTypes from 'prop-types';
 
+
 const Canvas = ({
   width,
   height,
@@ -42,6 +43,7 @@ const Canvas = ({
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
+
     // Draw all of the lines (reverse order so that erasing works)
     for (let i = lines.length - 1; i >= 0; i--) {
       drawLine(ctx, lines[i]);
