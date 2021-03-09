@@ -72,8 +72,10 @@ ToolbarButton.propTypes = {
  *   Callback to toggle visibility of highlights in the document.
  * @prop {() => any} toggleSidebar -
  *   Callback to toggle the visibility of the sidebar.
- * @prop {() => any} toggleDoodleability -
- *   Callback to toggle visibility of highlights in the document.
+ * @prop {() => any} setDoodleabilityOn -
+ *   Callback to set doodleability on
+ * @prop {() => any} setDoodleabilityOff
+ *   Callback to set doodleability off
  * @prop {import("preact").Ref<HTMLButtonElement>} [toggleSidebarRef] -
  *   Ref that gets set to the toolbar button for toggling the sidebar.
  *   This is exposed to enable the drag-to-resize functionality of this
@@ -100,7 +102,8 @@ export default function Toolbar({
   showHighlights,
   toggleHighlights,
   toggleSidebar,
-  toggleDoodleability,
+  setDoodleabilityOn,
+  setDoodleabilityOff,
   toggleSidebarRef,
   useMinimalControls = false,
   drawingToolbarActivated,
@@ -179,17 +182,21 @@ export default function Toolbar({
             <ToolbarButton
               label="Stop doodle"
               icon="close"
-              onClick={drawingToolbarToggle}
+              onClick={() => {
+                setDoodleabilityOff();
+                drawingToolbarToggle();
+              }}
             />
             <ToolbarButton
               label="Pen"
               icon="pen"
-              onClick={toggleDoodleability}
+              onClick={setDoodleabilityOn}
             />
             <ToolbarButton
               label="Eraser"
               icon="erase"
               onClick={() => {
+                setDoodleabilityOff();
                 alert('This would erase!');
               }}
             />
@@ -208,7 +215,8 @@ Toolbar.propTypes = {
   showHighlights: propTypes.bool.isRequired,
   toggleHighlights: propTypes.func.isRequired,
   toggleSidebar: propTypes.func.isRequired,
-  toggleDoodleability: propTypes.func.isRequired,
+  setDoodleabilityOn: propTypes.func.isRequired,
+  setDoodleabilityOff: propTypes.func.isRequired,
   toggleSidebarRef: propTypes.any,
   useMinimalControls: propTypes.bool,
   drawingToolbarActivated: propTypes.bool,
