@@ -267,7 +267,7 @@ export function highlightRange(
     highlightEl.className = cssClass;
     //here is where we can call another function to get the color for the user
     //color-->index number in the 'user-color' class
-    if (colorNum != -1) {
+    if (colorNum !== -1) {
       highlightEl.classList.toggle('user-color' + Math.round(colorNum), true);
     }
 
