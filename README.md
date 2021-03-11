@@ -54,3 +54,10 @@ license information can be found in the included [LICENSE][license] file.
 
 [bsd2c]: http://www.opensource.org/licenses/BSD-2-Clause
 [license]: https://github.com/hypothesis/client/blob/master/LICENSE
+
+Build Instructions
+-------
+
+Need to have downloaded and yarn linked browser-extension from the Hypothesis website.
+/client run: make dev
+/browswer-extension run: make build SETTINGS_FILE=settings/chrome-prod.json
