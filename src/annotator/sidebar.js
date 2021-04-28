@@ -445,7 +445,6 @@ export default class Sidebar extends Guest {
    * (CreativeNTR) Save the doodle
    */
   saveDoodle() {
-    // TODO figure out what to call here to save the doodle
     this.crossframe.call('saveCurrentDoodle');
   }
 }

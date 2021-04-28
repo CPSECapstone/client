@@ -74,7 +74,7 @@ ToolbarButton.propTypes = {
  *   Callback to toggle the visibility of the sidebar.
  * @prop {(object) => any} setDoodleOptions
  *   Callback to set the options of the doodle canvas
- * * @prop {() => any} saveDoodle
+ * @prop {() => any} saveDoodle
  *   Callback to set the options of the doodle canvas
  * @prop {import("preact").Ref<HTMLButtonElement>} [toggleSidebarRef] -
  *   Ref that gets set to the toolbar button for toggling the sidebar.
