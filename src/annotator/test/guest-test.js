@@ -184,6 +184,7 @@ describe('Guest', () => {
 
       beforeEach(() => {
         guest = createGuest();
+        guest.loadDoodles = sinon.stub();
         options = CrossFrame.lastCall.args[1];
       });
 
@@ -203,6 +204,36 @@ describe('Guest', () => {
         assert.calledTwice(guest.anchor);
         assert.calledWith(guest.anchor, ann1);
         assert.calledWith(guest.anchor, ann2);
+      });
+
+      it('calls loadDoodles with only doodle annotations on "annotationsLoaded"', () => {
+        const ann1 = {
+          id: 1,
+          $tag: 'tag1',
+          target: [
+            {
+              selector: [
+                {
+                  type: 'DoodleSelector',
+                  line: {
+                    points: [
+                      [1, 1],
+                      [2, 2],
+                    ],
+                    size: 5,
+                    color: '#FF0000',
+                    tool: 'pen',
+                  },
+                },
+              ],
+            },
+          ],
+        };
+        const ann2 = { id: 2, $tag: 'tag2' };
+        sandbox.stub(guest, 'anchor');
+        options.emit('annotationsLoaded', [ann1, ann2]);
+        assert.calledOnce(guest.loadDoodles);
+        assert.calledWith(guest.loadDoodles, [ann1]);
       });
 
       it('proxies all other events into the annotator event system', () => {
