@@ -125,7 +125,7 @@ export default class Guest extends Delegator {
 
     /** TODO add this type back while still passing linter {DoodleController|null}* } */
     this.doodleCanvasController = null;
-
+    //TODO add in another canvas for displaying (or maybe just display on the drawing canvas for now...?)
     this.adderToolbar = document.createElement('hypothesis-adder');
     this.adderToolbar.style.display = 'none';
     this.element.appendChild(this.adderToolbar);
@@ -306,6 +306,7 @@ export default class Guest extends Delegator {
     });
 
     this.subscribe('annotationsLoaded', annotations => {
+      this.loadDoodles(annotations.filter(this.isDoodleAnnotation));
       annotations.map(annotation => this.anchor(annotation));
     });
   }
@@ -777,5 +778,37 @@ export default class Guest extends Delegator {
       });
       this.doodleCanvasController.lines = [];
     }
+  }
+
+  isDoodleAnnotation(annotation) {
+    // If any of the targets have a DoodleSelector, this is a doodle annotation. Otherwise, it is not.
+    for (let targ of annotation.target) {
+      // not all targets have selectors at this point
+      if (targ.selector) {
+        for (let selector of targ.selector) {
+          if (selector.type === 'DoodleSelector') {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  loadDoodles(doodleAnnotations) {
+    let newLines = [];
+    for (let doodle of doodleAnnotations) {
+      for (let targ of doodle.target) {
+        for (let sel of targ.selector) {
+          if (sel.type === 'DoodleSelector') {
+            newLines = [...newLines, sel.line];
+          }
+        }
+      }
+    }
+    this.doodleCanvasController.lines = [
+      ...this.doodleCanvasController.lines,
+      ...newLines,
+    ];
   }
 }
