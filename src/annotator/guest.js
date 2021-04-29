@@ -782,12 +782,14 @@ export default class Guest extends Delegator {
 
   isDoodleAnnotation(annotation) {
     // If any of the targets have a DoodleSelector, this is a doodle annotation. Otherwise, it is not.
-    for (let targ of annotation.target) {
-      // not all targets have selectors at this point
-      if (targ.selector) {
-        for (let selector of targ.selector) {
-          if (selector.type === 'DoodleSelector') {
-            return true;
+    if (annotation.target) {
+      for (let targ of annotation.target) {
+        // not all targets have selectors at this point
+        if (targ.selector) {
+          for (let selector of targ.selector) {
+            if (selector.type === 'DoodleSelector') {
+              return true;
+            }
           }
         }
       }
@@ -796,6 +798,12 @@ export default class Guest extends Delegator {
   }
 
   loadDoodles(doodleAnnotations) {
+    // First, make sure there are doodleAnnotations
+    if (!doodleAnnotations.length || !this.doodleCanvasController) {
+      return;
+    }
+    // Then, load the lines into our DoodleCanvas.
+    // TODO: make this load into a display canvas, instead of a doodling canvas.
     let newLines = [];
     for (let doodle of doodleAnnotations) {
       for (let targ of doodle.target) {
