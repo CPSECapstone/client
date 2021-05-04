@@ -87,8 +87,8 @@ class PointResolver {
     }
     // Any sub-band should also be allowed to resolve
     /** @type {Element[]} */
-    // @ts-ignore For some reason, it's trying to give arr the type never[]
     const subResolved = this.subResolvers.reduce(
+      // @ts-ignore For some reason, it's trying to give arr the type never[]
       (arr, resolver) => arr.concat(resolver.resolvePoint(x, y)),
       []
     );
