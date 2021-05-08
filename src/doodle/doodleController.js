@@ -1,5 +1,5 @@
 import { render, createElement } from 'preact';
-import { Canvas } from './canvas';
+import { DisplayCanvas } from './displayCanvas';
 import { DoodleCanvas } from './doodleCanvas';
 
 export class DoodleController {
@@ -119,34 +119,9 @@ export class DoodleController {
     }
     // if not doodleable, render a regular canvas with BOTH the newLines and the savedLines
     else if (this._canDisplay) {
-      const boundingRect = this._container.getBoundingClientRect();
       const combinedLines = [...this._newLines, ...this._savedLines];
       render(
-        <div
-          style={{
-            position: 'absolute',
-            top: boundingRect.top + window.scrollY,
-            left: boundingRect.left + window.scrollX,
-            zIndex: 9999,
-            backgroundColor: 'rgba(0, 255, 255, 0.2)',
-            pointerEvents: 'none',
-          }}
-        >
-          <Canvas
-            width={boundingRect.width}
-            height={
-              Math.min(
-                boundingRect.height,
-                10000
-              ) /*Canvas starts to lag over 10k, doesnt work over 32k*/
-            }
-            handleMouseDown={() => {}}
-            handleMouseUp={() => {}}
-            handleMouseLeave={() => {}}
-            handleMouseMove={() => {}}
-            lines={combinedLines}
-          />
-        </div>,
+        <DisplayCanvas lines={combinedLines} container={this._container} />,
         this.target
       );
     }
