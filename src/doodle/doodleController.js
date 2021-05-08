@@ -1,4 +1,5 @@
 import { render, createElement } from 'preact';
+import { Canvas } from './canvas';
 import { DoodleCanvas } from './doodleCanvas';
 
 export class DoodleController {
@@ -9,12 +10,18 @@ export class DoodleController {
   constructor(container, options) {
     const { tool, size } = options;
     this._lines = [];
+    this._savedLines = [];
+    this._newLines = [];
 
     this._container = container === null ? document.body : container;
     this._tool = tool;
     this._size = size;
 
     this._doodleable = false;
+    this._canDisplay = false;
+
+    // create a new element to render into, to avoid overwriting the main page content.
+    this.target = document.body.appendChild(document.createElement('div'));
 
     this.render();
   }
@@ -32,15 +39,37 @@ export class DoodleController {
   }
 
   /**
-   * Update the lines and re-render on change
+   * canDisplay starts as false in order to prevent the weird canvas rendering issues that happen when canvasses are rendered right at the beginning
    */
-  set lines(newLines) {
-    this._lines = newLines;
+
+  set canDisplay(cd) {
+    this._canDisplay = cd;
     this.render();
   }
 
-  get lines() {
-    return this._lines;
+  get canDisplay() {
+    return this._canDisplay;
+  }
+
+  /**
+   * Update the lines and re-render on change
+   */
+  set savedLines(lines) {
+    this._savedLines = lines;
+    this.render();
+  }
+
+  get savedLines() {
+    return this._savedLines;
+  }
+
+  set newLines(lines) {
+    this._newLines = lines;
+    this.render();
+  }
+
+  get newLines() {
+    return this._newLines;
   }
 
   /**
@@ -71,19 +100,55 @@ export class DoodleController {
   }
 
   render() {
-    const setLines = newLines => {
-      this.lines = newLines;
+    const setLines = lines => {
+      this.newLines = lines;
     };
-    render(
-      <DoodleCanvas
-        attachedElement={this._container}
-        size={this._size}
-        tool={this._tool}
-        active={this._doodleable}
-        lines={this._lines}
-        setLines={setLines}
-      />,
-      document.body
-    );
+    // if doodleable, render a doodleCanvas with only the newLines
+    if (this._doodleable) {
+      render(
+        <DoodleCanvas
+          attachedElement={this._container}
+          size={this._size}
+          tool={this._tool}
+          active={this._doodleable}
+          lines={this.newLines}
+          setLines={setLines}
+        />,
+        this.target
+      );
+    }
+    // if not doodleable, render a regular canvas with BOTH the newLines and the savedLines
+    else if (this._canDisplay) {
+      const boundingRect = this._container.getBoundingClientRect();
+      const combinedLines = [...this._newLines, ...this._savedLines];
+      render(
+        <div
+          style={{
+            position: 'absolute',
+            top: boundingRect.top + window.scrollY,
+            left: boundingRect.left + window.scrollX,
+            zIndex: 9999,
+            backgroundColor: 'rgba(0, 255, 255, 0.2)',
+            pointerEvents: 'none',
+          }}
+        >
+          <Canvas
+            width={boundingRect.width}
+            height={
+              Math.min(
+                boundingRect.height,
+                10000
+              ) /*Canvas starts to lag over 10k, doesnt work over 32k*/
+            }
+            handleMouseDown={() => {}}
+            handleMouseUp={() => {}}
+            handleMouseLeave={() => {}}
+            handleMouseMove={() => {}}
+            lines={combinedLines}
+          />
+        </div>,
+        this.target
+      );
+    }
   }
 }

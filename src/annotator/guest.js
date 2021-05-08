@@ -125,7 +125,7 @@ export default class Guest extends Delegator {
 
     /** TODO add this type back while still passing linter {DoodleController|null}* } */
     this.doodleCanvasController = null;
-    //TODO add in another canvas for displaying (or maybe just display on the drawing canvas for now...?)
+
     this.adderToolbar = document.createElement('hypothesis-adder');
     this.adderToolbar.style.display = 'none';
     this.element.appendChild(this.adderToolbar);
@@ -774,7 +774,7 @@ export default class Guest extends Delegator {
     if (this.doodleCanvasController) {
       this.createAnnotation({
         $doodle: true,
-        doodleLines: this.doodleCanvasController.lines,
+        doodleLines: this.doodleCanvasController.newLines,
       });
       this.doodleCanvasController.lines = [];
     }
@@ -798,12 +798,12 @@ export default class Guest extends Delegator {
   }
 
   loadDoodles(doodleAnnotations) {
-    // First, make sure there are doodleAnnotations
+    // First, make sure there are doodleAnnotations and a Controller
     if (!doodleAnnotations.length || !this.doodleCanvasController) {
       return;
     }
-    // Then, load the lines into our DoodleCanvas.
-    // TODO: make this load into a display canvas, instead of a doodling canvas.
+
+    // Then, load the lines into our doodleCanvasController.
     let newLines = [];
     for (let doodle of doodleAnnotations) {
       for (let targ of doodle.target) {
@@ -814,9 +814,13 @@ export default class Guest extends Delegator {
         }
       }
     }
-    this.doodleCanvasController.lines = [
-      ...this.doodleCanvasController.lines,
+    // TODO: evaluate if we need to be appending, or if we could just be replacing doodleCanvasController.savedLines with newLines
+    this.doodleCanvasController.savedLines = [
+      ...this.doodleCanvasController.savedLines,
       ...newLines,
     ];
+
+    // start displaying the doodles
+    this.doodleCanvasController.canDisplay = true;
   }
 }
