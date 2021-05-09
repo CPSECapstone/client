@@ -31,11 +31,6 @@ const DoodleCanvas = ({
   setLines,
 }) => {
   const [isDrawing, setIsDrawing] = useState(false);
-  const [everActive, setEverActive] = useState(false);
-
-  if (active && !everActive) {
-    setEverActive(true);
-  }
 
   useEffect(() => {
     if (lines.length === 0) {
@@ -95,10 +90,6 @@ const DoodleCanvas = ({
 
     setLines([newLine, ...rest]);
   };
-
-  if (!everActive) {
-    return null;
-  }
 
   return (
     <div

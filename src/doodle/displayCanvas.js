@@ -10,7 +10,7 @@ const DisplayCanvas = ({ container, lines }) => {
         position: 'absolute',
         top: boundingRect.top + window.scrollY,
         left: boundingRect.left + window.scrollX,
-        zIndex: 9999,
+        zIndex: 9998,
         pointerEvents: 'none',
       }}
     >

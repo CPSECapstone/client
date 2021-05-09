@@ -1,4 +1,4 @@
-import { render, createElement } from 'preact';
+import { render, createElement, Fragment } from 'preact';
 import { DisplayCanvas } from './displayCanvas';
 import { DoodleCanvas } from './doodleCanvas';
 
@@ -18,7 +18,6 @@ export class DoodleController {
     this._size = size;
 
     this._doodleable = false;
-    this._canDisplay = false;
 
     // create a new element to render into, to avoid overwriting the main page content.
     this.target = document.body.appendChild(document.createElement('div'));
@@ -36,19 +35,6 @@ export class DoodleController {
 
   get tool() {
     return this._tool;
-  }
-
-  /**
-   * canDisplay starts as false in order to prevent the weird canvas rendering issues that happen when canvasses are rendered right at the beginning
-   */
-
-  set canDisplay(cd) {
-    this._canDisplay = cd;
-    this.render();
-  }
-
-  get canDisplay() {
-    return this._canDisplay;
   }
 
   /**
@@ -72,11 +58,6 @@ export class DoodleController {
     return this._newLines;
   }
 
-  /**
-   * Update the toolbar to reflect whether the "Create annotation" button will
-   * create a page note (if there is no selection) or an annotation (if there is
-   * a selection).
-   */
   set size(newSize) {
     this._size = newSize;
     this.render();
@@ -103,9 +84,8 @@ export class DoodleController {
     const setLines = lines => {
       this.newLines = lines;
     };
-    // if doodleable, render a doodleCanvas with only the newLines
-    if (this._doodleable) {
-      render(
+    render(
+      <Fragment>
         <DoodleCanvas
           attachedElement={this._container}
           size={this._size}
@@ -113,17 +93,10 @@ export class DoodleController {
           active={this._doodleable}
           lines={this.newLines}
           setLines={setLines}
-        />,
-        this.target
-      );
-    }
-    // if not doodleable, render a regular canvas with BOTH the newLines and the savedLines
-    else if (this._canDisplay) {
-      const combinedLines = [...this._newLines, ...this._savedLines];
-      render(
-        <DisplayCanvas lines={combinedLines} container={this._container} />,
-        this.target
-      );
-    }
+        />
+        <DisplayCanvas lines={this.savedLines} container={this._container} />
+      </Fragment>,
+      this.target
+    );
   }
 }

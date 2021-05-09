@@ -365,6 +365,10 @@ export default class Guest extends Delegator {
     crossframe.on('saveCurrentDoodle', () => {
       this.saveCurrentDoodle();
     });
+
+    crossframe.on('clearDoodleCanvas', () => {
+      this.clearDoodleCanvas();
+    });
   }
 
   destroy() {
@@ -776,9 +780,25 @@ export default class Guest extends Delegator {
         $doodle: true,
         doodleLines: this.doodleCanvasController.newLines,
       });
-      this.doodleCanvasController.lines = [];
+      // removed clearing lines from here because of bug when you try to save unsuccessfully (b/c not logged in) clearing your doodle
     }
   }
+
+  /**
+   * Clear the doodle canvas
+   */
+  clearDoodleCanvas() {
+    if (this.doodleCanvasController) {
+      //TODO why is this not clearing the canvas!?!?!
+      this.doodleCanvasController.newLines = [];
+    }
+  }
+
+  /**
+   *
+   * @param {*} annotation
+   * @returns true if the annotation is a doodleAnnotation
+   */
 
   isDoodleAnnotation(annotation) {
     // If any of the targets have a DoodleSelector, this is a doodle annotation. Otherwise, it is not.
@@ -814,13 +834,10 @@ export default class Guest extends Delegator {
         }
       }
     }
-    // TODO: evaluate if we need to be appending, or if we could just be replacing doodleCanvasController.savedLines with newLines
+
     this.doodleCanvasController.savedLines = [
       ...this.doodleCanvasController.savedLines,
       ...newLines,
     ];
-
-    // start displaying the doodles
-    this.doodleCanvasController.canDisplay = true;
   }
 }

@@ -121,6 +121,11 @@ export default function FrameSync(annotationsService, bridge, store) {
       }
       inFrame.add(event.tag);
 
+      // if this is a doodle being saved, clear the canvas
+      if (annot.$doodle) {
+        bridge.call('clearDoodleCanvas', {});
+      }
+
       // Create the new annotation in the sidebar.
       annotationsService.create(annot);
     });
@@ -184,6 +189,9 @@ export default function FrameSync(annotationsService, bridge, store) {
     });
     bridge.on('saveCurrentDoodle', function (state) {
       bridge.call('saveCurrentDoodle', state);
+    });
+    bridge.on('clearDoodleCanvas', function (state) {
+      bridge.call('clearDoodleCanvas', state);
     });
   }
 
