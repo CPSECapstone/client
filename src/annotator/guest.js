@@ -834,7 +834,6 @@ export default class Guest extends Delegator {
         }
       }
     }
-
     this.doodleCanvasController.savedLines = [
       ...this.doodleCanvasController.savedLines,
       ...newLines,
