@@ -306,6 +306,7 @@ export default class Guest extends Delegator {
     });
 
     this.subscribe('annotationsLoaded', annotations => {
+      this.loadDoodles(annotations.filter(this.isDoodleAnnotation));
       annotations.map(annotation => this.anchor(annotation));
     });
   }
@@ -363,6 +364,10 @@ export default class Guest extends Delegator {
 
     crossframe.on('saveCurrentDoodle', () => {
       this.saveCurrentDoodle();
+    });
+
+    crossframe.on('clearDoodleCanvas', () => {
+      this.clearDoodleCanvas();
     });
   }
 
@@ -773,9 +778,64 @@ export default class Guest extends Delegator {
     if (this.doodleCanvasController) {
       this.createAnnotation({
         $doodle: true,
-        doodleLines: this.doodleCanvasController.lines,
+        doodleLines: this.doodleCanvasController.newLines,
       });
-      this.doodleCanvasController.lines = [];
+      // removed clearing lines from here because of bug when you try to save unsuccessfully (b/c not logged in) clearing your doodle
     }
+  }
+
+  /**
+   * Clear the doodle canvas
+   */
+  clearDoodleCanvas() {
+    if (this.doodleCanvasController) {
+      this.doodleCanvasController.saveLines();
+    }
+  }
+
+  /**
+   *
+   * @param {*} annotation
+   * @returns true if the annotation is a doodleAnnotation
+   */
+
+  isDoodleAnnotation(annotation) {
+    // If any of the targets have a DoodleSelector, this is a doodle annotation. Otherwise, it is not.
+    if (annotation.target) {
+      for (let targ of annotation.target) {
+        // not all targets have selectors at this point
+        if (targ.selector) {
+          for (let selector of targ.selector) {
+            if (selector.type === 'DoodleSelector') {
+              return true;
+            }
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  loadDoodles(doodleAnnotations) {
+    // First, make sure there are doodleAnnotations and a Controller
+    if (!doodleAnnotations.length || !this.doodleCanvasController) {
+      return;
+    }
+
+    // Then, load the lines into our doodleCanvasController.
+    let newLines = [];
+    for (let doodle of doodleAnnotations) {
+      for (let targ of doodle.target) {
+        for (let sel of targ.selector) {
+          if (sel.type === 'DoodleSelector') {
+            newLines = [...newLines, sel.line];
+          }
+        }
+      }
+    }
+    this.doodleCanvasController.savedLines = [
+      ...this.doodleCanvasController.savedLines,
+      ...newLines,
+    ];
   }
 }

@@ -117,7 +117,12 @@ export default function annotationsService(api, store) {
     if (metadata.isPageNote(annotation)) {
       store.selectTab('note');
     } else if (metadata.isAnnotation(annotation)) {
-      store.selectTab('annotation');
+      // if this is a doodle, select the doodle tab
+      if (annotation.$doodle) {
+        store.selectTab('orphan');
+      } else {
+        store.selectTab('annotation');
+      }
     }
 
     (annotation.references || []).forEach(parent => {

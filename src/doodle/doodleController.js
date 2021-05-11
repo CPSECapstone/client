@@ -1,4 +1,5 @@
-import { render, createElement } from 'preact';
+import { render, createElement, Fragment } from 'preact';
+import { DisplayCanvas } from './displayCanvas';
 import { DoodleCanvas } from './doodleCanvas';
 
 export class DoodleController {
@@ -9,12 +10,17 @@ export class DoodleController {
   constructor(container, options) {
     const { tool, size } = options;
     this._lines = [];
+    this._savedLines = [];
+    this._newLines = [];
 
     this._container = container === null ? document.body : container;
     this._tool = tool;
     this._size = size;
 
     this._doodleable = false;
+
+    // create a new element to render into, to avoid overwriting the main page content.
+    this.target = document.body.appendChild(document.createElement('div'));
 
     this.render();
   }
@@ -34,20 +40,24 @@ export class DoodleController {
   /**
    * Update the lines and re-render on change
    */
-  set lines(newLines) {
-    this._lines = newLines;
+  set savedLines(lines) {
+    this._savedLines = lines;
     this.render();
   }
 
-  get lines() {
-    return this._lines;
+  get savedLines() {
+    return this._savedLines;
   }
 
-  /**
-   * Update the toolbar to reflect whether the "Create annotation" button will
-   * create a page note (if there is no selection) or an annotation (if there is
-   * a selection).
-   */
+  set newLines(lines) {
+    this._newLines = lines;
+    this.render();
+  }
+
+  get newLines() {
+    return this._newLines;
+  }
+
   set size(newSize) {
     this._size = newSize;
     this.render();
@@ -70,20 +80,29 @@ export class DoodleController {
     return this._doodleable;
   }
 
+  saveLines() {
+    this._savedLines = [...this._newLines, ...this._savedLines];
+    this._newLines = [];
+    this.render();
+  }
+
   render() {
-    const setLines = newLines => {
-      this.lines = newLines;
+    const setLines = lines => {
+      this.newLines = lines;
     };
     render(
-      <DoodleCanvas
-        attachedElement={this._container}
-        size={this._size}
-        tool={this._tool}
-        active={this._doodleable}
-        lines={this._lines}
-        setLines={setLines}
-      />,
-      document.body
+      <Fragment>
+        <DoodleCanvas
+          attachedElement={this._container}
+          size={this._size}
+          tool={this._tool}
+          active={this._doodleable}
+          lines={this.newLines}
+          setLines={setLines}
+        />
+        <DisplayCanvas lines={this.savedLines} container={this._container} />
+      </Fragment>,
+      this.target
     );
   }
 }

@@ -99,6 +99,7 @@
  * // Properties not present on API objects, but added by utilities in the client.
  * @prop {boolean} [$highlight]
  * @prop {boolean} [$orphan]
+ * @prop {boolean} [$doodle]
  * @prop {boolean} [$anchorTimeout]
  */
 

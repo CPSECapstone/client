@@ -19,4 +19,5 @@ export default {
   close: require('../images/icons/close.svg'),
   pen: require('../images/icons/pen.svg'),
   erase: require('../images/icons/erase.svg'),
+  save: require('../images/icons/save.svg'),
 };

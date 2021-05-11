@@ -196,7 +196,7 @@ export default function Toolbar({
             />
             <ToolbarButton
               label="Save"
-              icon="erase"
+              icon="save"
               onClick={() => saveDoodle()}
             />
           </div>

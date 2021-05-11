@@ -141,6 +141,7 @@ export default class Sidebar extends Guest {
     });
     this.toolbar.useMinimalControls = config.theme === 'clean';
 
+    // Set up the canvases for displaying and creating doodles
     this.doodleCanvasController = new DoodleController(
       document.getElementById('main-content'),
       {
