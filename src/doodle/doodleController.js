@@ -18,10 +18,6 @@ export class DoodleController {
     this._size = size;
 
     this._doodleable = false;
-    this._canDisplay = false;
-
-    // create a new element to render into, to avoid overwriting the main page content.
-    this.target = document.body.appendChild(document.createElement('div'));
 
     // create a new element to render into, to avoid overwriting the main page content.
     this.target = document.body.appendChild(document.createElement('div'));
@@ -39,19 +35,6 @@ export class DoodleController {
 
   get tool() {
     return this._tool;
-  }
-
-  /**
-   * canDisplay starts as false in order to prevent the weird canvas rendering issues that happen when canvasses are rendered right at the beginning
-   */
-
-  set canDisplay(cd) {
-    this._canDisplay = cd;
-    this.render();
-  }
-
-  get canDisplay() {
-    return this._canDisplay;
   }
 
   /**
@@ -95,6 +78,12 @@ export class DoodleController {
 
   get doodleable() {
     return this._doodleable;
+  }
+
+  saveLines() {
+    this._savedLines = [...this._newLines, ...this._savedLines];
+    this._newLines = [];
+    this.render();
   }
 
   render() {

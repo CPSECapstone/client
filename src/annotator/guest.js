@@ -789,8 +789,7 @@ export default class Guest extends Delegator {
    */
   clearDoodleCanvas() {
     if (this.doodleCanvasController) {
-      //TODO why is this not clearing the canvas!?!?!
-      this.doodleCanvasController.newLines = [];
+      this.doodleCanvasController.saveLines();
     }
   }
 

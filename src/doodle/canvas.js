@@ -42,6 +42,7 @@ const Canvas = ({
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Draw all of the lines (reverse order so that erasing works)
     for (let i = lines.length - 1; i >= 0; i--) {
