@@ -147,6 +147,7 @@ export default class Sidebar extends Guest {
       {
         tool: 'pen',
         size: 5,
+        color: 'red',
       }
     );
 

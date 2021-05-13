@@ -8,7 +8,7 @@ export class DoodleController {
    * @param {any} options
    */
   constructor(container, options) {
-    const { tool, size } = options;
+    const { tool, size, color } = options;
     this._lines = [];
     this._savedLines = [];
     this._newLines = [];
@@ -16,6 +16,7 @@ export class DoodleController {
     this._container = container === null ? document.body : container;
     this._tool = tool;
     this._size = size;
+    this._color = color;
 
     this._doodleable = false;
 
@@ -63,6 +64,15 @@ export class DoodleController {
     this.render();
   }
 
+  set color(newColor) {
+    this._color = newColor;
+    this.render();
+  }
+
+  get color() {
+    return this._color;
+  }
+
   get size() {
     return this._size;
   }
@@ -99,6 +109,7 @@ export class DoodleController {
           active={this._doodleable}
           lines={this.newLines}
           setLines={setLines}
+          color={this._color}
         />
         <DisplayCanvas lines={this.savedLines} container={this._container} />
       </Fragment>,

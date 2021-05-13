@@ -19,6 +19,7 @@ describe('Toolbar', () => {
         showHighlights={false}
         newAnnotationType="note"
         useMinimalControls={false}
+        setDoodleOptions={noop}
         {...props}
       />
     );

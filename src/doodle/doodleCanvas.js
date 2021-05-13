@@ -8,6 +8,7 @@ import propTypes from 'prop-types';
  * @prop {string} tool - The name of the tool that is being used. One of {'pen'|'eraser'}.
  * @prop {number} size - The size of the brush.
  * @prop {boolean} active - Whether the canvas can be doodled on at this time
+ * @prop {string} color - The color of the brush
  * @prop {HTMLElement} attachedElement - Which element the DoodleCanvas should cover.
  * @prop {Array<import('../types/api').DoodleLine>} lines - An array of lines that compose this doodle.
  * @prop {Function} setLines - A function to set the lines
@@ -26,6 +27,7 @@ const DoodleCanvas = ({
   tool,
   size,
   active,
+  color,
   attachedElement,
   lines,
   setLines,
@@ -54,7 +56,7 @@ const DoodleCanvas = ({
     setLines([
       {
         tool: tool,
-        color: 'red',
+        color: color,
         size: size,
         points: [[e.offsetX, e.offsetY]],
       },
@@ -126,6 +128,7 @@ DoodleCanvas.propTypes = {
   active: propTypes.bool.isRequired,
   lines: propTypes.array.isRequired,
   setLines: propTypes.func.isRequired,
+  color: propTypes.string.isRequired,
   attachedElement: propTypes.any.isRequired,
 };
 
