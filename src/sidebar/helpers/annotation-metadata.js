@@ -236,6 +236,15 @@ export function isOrphan(annotation) {
 }
 
 /**
+ * Return `true` if the given annotation is a doodle.
+ *
+ * @param {Annotation} annotation
+ */
+export function isDoodle(annotation) {
+  return hasSelector(annotation) && annotation.$doodle === true;
+}
+
+/**
  * Return `true` if the given annotation is a page note.
  *
  * @param {Annotation} annotation
