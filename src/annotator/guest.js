@@ -498,12 +498,15 @@ export default class Guest extends Delegator {
         }
       }
       annotation.$orphan = hasAnchorableTargets && !hasAnchoredTargets;
+      //WILLNOTE why is this `undefined` when all of the annotations are being counted? Orphans is set properly!
+      // An annotation is a doodle if any of its selectors have the type 'DoodleSelector'
       annotation.$doodle = anchors.some(a => {
         return (
           a.target && a.target.selector?.some(s => s.type === 'DoodleSelector')
         );
       });
 
+      // Display the doodle on the canvas
       if (annotation.$doodle) {
         this.loadDoodle(annotation);
       }

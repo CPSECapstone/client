@@ -148,7 +148,9 @@ export default function FrameSync(annotationsService, bridge, store) {
       events_.forEach(function (event) {
         inFrame.add(event.tag);
         anchoringStatusUpdates[event.tag] = event.msg.$orphan
-          ? 'orphan'
+          ? event.msg.$doodle
+            ? 'doodle'
+            : 'orphan'
           : 'anchored';
         scheduleAnchoringStatusUpdate();
       });

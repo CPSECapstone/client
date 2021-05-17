@@ -14,7 +14,7 @@
  *   @prop {string[]} forcedVisible
  *   @prop {string[]} selected
  *   @prop {string} sortKey
- *   @prop {'annotation'|'note'|'orphan'} selectedTab
+ *   @prop {TabName} selectedTab
  */
 
 import { createSelector } from 'reselect';

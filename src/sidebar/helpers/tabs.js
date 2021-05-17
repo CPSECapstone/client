@@ -18,6 +18,8 @@ export function tabForAnnotation(ann) {
     return 'orphan';
   } else if (metadata.isPageNote(ann)) {
     return 'note';
+  } else if (metadata.isDoodle(ann)) {
+    return 'doodle';
   } else {
     return 'annotation';
   }
