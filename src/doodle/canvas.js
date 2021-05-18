@@ -59,6 +59,7 @@ const Canvas = ({
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseLeave}
+      id="canvas"
     />
   );
 };

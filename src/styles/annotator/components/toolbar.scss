@@ -10,6 +10,26 @@
   pointer-events: none;
 }
 
+.size1 {
+  cursor: url('../images/icons/circle1.svg'), auto;
+}
+
+.size5 {
+  cursor: url('../images/icons/circle5.svg') 2 2, auto;
+}
+
+.size10 {
+  cursor: url('../images/icons/circle10.svg') 5 5, auto;
+}
+
+.size30 {
+  cursor: url('../images/icons/circle30.svg') 15 15, auto;
+}
+
+.size60 {
+  cursor: url('../images/icons/circle60.svg') 30 30, auto;
+}
+
 // note: These components CSS classes are nested inside
 // .annotator-frame to avoid being overridden by the
 // CSS reset styles applied to .annotator-frame, which would otherwise
