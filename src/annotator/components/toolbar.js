@@ -116,13 +116,40 @@ export default function Toolbar({
 
   const [toolSize, setToolSize] = useState(medium);
 
-  const [tool, setTool] = useState('pen');
-
   const [color, setColor] = useState('red');
 
   useEffect(() => {
-    setDoodleOptions({ tool: tool, size: toolSize, color: color });
-  }, [toolSize, tool, color, setDoodleOptions]);
+    setDoodleOptions({ tool: 'pen', size: toolSize, color: color });
+  }, [toolSize, color, setDoodleOptions]);
+
+  const eraserSmall = 10;
+  const eraserMedium = 30;
+  const eraserLarge = 60;
+
+  const [eraserSize, setEraserSize] = useState(eraserMedium);
+
+  useEffect(() => {
+    setDoodleOptions({ tool: 'eraser', size: eraserSize });
+  }, [eraserSize, setDoodleOptions]);
+
+  function setSelected(e, optionalClass = '') {
+    let elems = e.target?.parentElement.querySelectorAll(
+      '.annotator-toolbar-button' + optionalClass
+    );
+    [].forEach.call(elems, function (el) {
+      //@ts-ignore
+      el.classList.remove('selected');
+    });
+    e.target?.classList.toggle('selected');
+  }
+
+  function setPen() {
+    setDoodleOptions({ tool: 'pen', size: toolSize, color: color });
+  }
+
+  function setEraser() {
+    setDoodleOptions({ tool: 'eraser', size: eraserSize, color: color });
+  }
 
   if (!drawingToolbarActivated) {
     return (
@@ -199,95 +226,142 @@ export default function Toolbar({
               icon="close"
               onClick={drawingToolbarToggle}
             />
-            <ToolbarButton
-              label="Pen"
-              icon="pen"
-              onClick={() => {
-                setTool('pen');
-              }}
-            />
-            <ToolbarButton
-              label="Eraser"
-              icon="erase"
-              onClick={() => {
-                setTool('eraser');
-              }}
-            />
             <button
-              className="popup annotator-toolbar-button size selected"
+              className="popup annotator-toolbar-button 
+                toolbar pen selected"
               onClick={e => {
+                setPen();
                 //@ts-ignore
-                e.target?.querySelector('#myPopup').classList.toggle('show');
+                e.target?.querySelector('#penPopup').classList.toggle('show');
                 //@ts-ignore
                 e.target?.parentElement
-                  .querySelector('.color')
-                  .querySelector('#myPopup')
+                  .querySelector('.eraser')
+                  .querySelector('#eraserPopup')
                   .classList.remove('show');
+                setSelected(e, '.toolbar');
               }}
               aria-label="Brush Size"
             >
-              <SvgIcon name="sizes-icon" className="svgicon" />
-              <span className="popuptext" id="myPopup">
-                <ToolbarButton
-                  label="Large"
-                  icon="circle-large"
-                  onClick={() => {
-                    setToolSize(large);
-                  }}
-                />
-                <ToolbarButton
-                  label="Medium"
-                  icon="circle-medium"
-                  onClick={() => {
-                    setToolSize(medium);
-                  }}
-                />
-                <ToolbarButton
-                  label="Small"
-                  icon="circle-small"
-                  className="annotator-toolbar-button smallSelector"
-                  onClick={() => {
-                    setToolSize(small);
-                  }}
-                />
+              <SvgIcon name="pen" className="svgicon" />
+              <span className="popuptext show" id="penPopup">
+                <div className="popup-child">
+                  <button
+                    className="popup annotator-toolbar-button"
+                    onClick={e => {
+                      setToolSize(large);
+                      setSelected(e);
+                    }}
+                    aria-label="Large"
+                  >
+                    <SvgIcon name="circle-large" className="svgicon" />
+                  </button>
+                  <button
+                    className="popup annotator-toolbar-button selected"
+                    onClick={e => {
+                      setToolSize(medium);
+                      setSelected(e);
+                    }}
+                    aria-label="Medium"
+                  >
+                    <SvgIcon name="circle-medium" className="svgicon" />
+                  </button>
+                  <button
+                    className="popup annotator-toolbar-button"
+                    onClick={e => {
+                      setToolSize(small);
+                      setSelected(e);
+                    }}
+                    aria-label="Small"
+                  >
+                    <SvgIcon name="circle-small" className="svgicon" />
+                  </button>
+                </div>
+                <div className="popup-child">
+                  <button
+                    className="popup annotator-toolbar-button selected"
+                    onClick={e => {
+                      setColor('red');
+                      setSelected(e);
+                    }}
+                    aria-label="Red"
+                  >
+                    <SvgIcon name="red-icon" className="svgicon" />
+                  </button>
+                  <button
+                    className="popup annotator-toolbar-button"
+                    onClick={e => {
+                      setColor('green');
+                      setSelected(e);
+                    }}
+                    aria-label="Green"
+                  >
+                    <SvgIcon name="green-icon" className="svgicon" />
+                  </button>
+                  <button
+                    className="popup annotator-toolbar-button"
+                    onClick={e => {
+                      setColor('blue');
+                      setSelected(e);
+                    }}
+                    aria-label="Blue"
+                  >
+                    <SvgIcon name="blue-icon" className="svgicon" />
+                  </button>
+                </div>
               </span>
             </button>
             <button
-              className="popup annotator-toolbar-button color"
+              className="popup annotator-toolbar-button 
+                toolbar eraser"
               onClick={e => {
+                setEraser();
                 //@ts-ignore
-                e.target?.querySelector('#myPopup').classList.toggle('show');
+                e.target
+                  ?.querySelector('#eraserPopup')
+                  .classList.toggle('show');
                 //@ts-ignore
                 e.target?.parentElement
-                  .querySelector('.size')
-                  .querySelector('#myPopup')
+                  .querySelector('.pen')
+                  .querySelector('#penPopup')
                   .classList.remove('show');
+                setSelected(e, '.toolbar');
               }}
-              aria-label="Brush Color"
+              aria-label="Brush Size"
             >
-              <SvgIcon name="color-icon" className="svgicon" />
-              <span className="popuptext" id="myPopup">
-                <ToolbarButton
-                  label="Red"
-                  icon="red-icon"
-                  onClick={() => {
-                    setColor('red');
-                  }}
-                />
-                <ToolbarButton
-                  label="Green"
-                  icon="green-icon"
-                  onClick={() => {
-                    setColor('green');
-                  }}
-                />
-                <ToolbarButton
-                  label="Blue"
-                  icon="blue-icon"
-                  onClick={() => {
-                    setColor('blue');
-                  }}
-                />
+              <SvgIcon name="erase" className="svgicon" />
+              <span className="popuptext erase" id="eraserPopup">
+                <div className="popup-child">
+                  <button
+                    className="popup annotator-toolbar-button"
+                    onClick={e => {
+                      setEraserSize(eraserLarge);
+                      setSelected(e);
+                    }}
+                    aria-label="Large"
+                  >
+                    <SvgIcon name="circle-large" className="svgicon" />
+                  </button>
+                  <button
+                    className="popup annotator-toolbar-button selected"
+                    onClick={e => {
+                      setEraserSize(eraserMedium);
+                      setSelected(e);
+                    }}
+                    aria-label="Medium"
+                  >
+                    <SvgIcon name="circle-medium" className="svgicon" />
+                  </button>
+                  <button
+                    className="popup annotator-toolbar-button"
+                    onClick={e => {
+                      setEraserSize(eraserSmall);
+                      setSelected(e);
+                    }}
+                    aria-label="Small"
+                  >
+                    <SvgIcon name="circle-small" className="svgicon" />
+                  </button>
+                </div>
               </span>
             </button>
             <ToolbarButton
