@@ -316,8 +316,7 @@ export default function Toolbar({
               onClick={e => {
                 setEraser();
                 //@ts-ignore
-                e.target
-                  ?.querySelector('#eraserPopup')
+                e.target?.querySelector('#eraserPopup')
                   .classList.toggle('show');
                 //@ts-ignore
                 e.target?.parentElement
