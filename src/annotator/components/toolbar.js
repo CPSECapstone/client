@@ -240,7 +240,8 @@ export default function Toolbar({
                   .classList.remove('show');
                 setSelected(e, '.toolbar');
               }}
-              aria-label="Brush Size"
+              aria-label="Pen"
+              title="Pen"
             >
               <SvgIcon name="pen" className="svgicon" />
               <span className="popuptext show" id="penPopup">
@@ -252,6 +253,7 @@ export default function Toolbar({
                       setSelected(e);
                     }}
                     aria-label="Large"
+                    title="Large"
                   >
                     <SvgIcon name="circle-large" className="svgicon" />
                   </button>
@@ -262,6 +264,7 @@ export default function Toolbar({
                       setSelected(e);
                     }}
                     aria-label="Medium"
+                    title="Medium"
                   >
                     <SvgIcon name="circle-medium" className="svgicon" />
                   </button>
@@ -272,6 +275,7 @@ export default function Toolbar({
                       setSelected(e);
                     }}
                     aria-label="Small"
+                    title="Small"
                   >
                     <SvgIcon name="circle-small" className="svgicon" />
                   </button>
@@ -280,30 +284,33 @@ export default function Toolbar({
                   <button
                     className="popup annotator-toolbar-button selected"
                     onClick={e => {
-                      setColor('red');
+                      setColor('d81b60');
                       setSelected(e);
                     }}
                     aria-label="Red"
+                    title="Red"
                   >
                     <SvgIcon name="red-icon" className="svgicon" />
                   </button>
                   <button
                     className="popup annotator-toolbar-button"
                     onClick={e => {
-                      setColor('green');
+                      setColor('#004d40');
                       setSelected(e);
                     }}
                     aria-label="Green"
+                    title="Green"
                   >
                     <SvgIcon name="green-icon" className="svgicon" />
                   </button>
                   <button
                     className="popup annotator-toolbar-button"
                     onClick={e => {
-                      setColor('blue');
+                      setColor('#1e88e5');
                       setSelected(e);
                     }}
                     aria-label="Blue"
+                    title="Blue"
                   >
                     <SvgIcon name="blue-icon" className="svgicon" />
                   </button>
@@ -326,7 +333,8 @@ export default function Toolbar({
                   .classList.remove('show');
                 setSelected(e, '.toolbar');
               }}
-              aria-label="Brush Size"
+              aria-label="Eraser"
+              title="Eraser"
             >
               <SvgIcon name="erase" className="svgicon" />
               <span className="popuptext erase" id="eraserPopup">
@@ -338,6 +346,7 @@ export default function Toolbar({
                       setSelected(e);
                     }}
                     aria-label="Large"
+                    title="Large"
                   >
                     <SvgIcon name="circle-large" className="svgicon" />
                   </button>
@@ -348,6 +357,7 @@ export default function Toolbar({
                       setSelected(e);
                     }}
                     aria-label="Medium"
+                    title="Medium"
                   >
                     <SvgIcon name="circle-medium" className="svgicon" />
                   </button>
@@ -358,6 +368,7 @@ export default function Toolbar({
                       setSelected(e);
                     }}
                     aria-label="Small"
+                    title="Small"
                   >
                     <SvgIcon name="circle-small" className="svgicon" />
                   </button>
