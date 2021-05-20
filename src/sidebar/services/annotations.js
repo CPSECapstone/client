@@ -119,7 +119,7 @@ export default function annotationsService(api, store) {
     } else if (metadata.isAnnotation(annotation)) {
       // if this is a doodle, select the doodle tab
       if (annotation.$doodle) {
-        store.selectTab('orphan');
+        store.selectTab('doodle');
       } else {
         store.selectTab('annotation');
       }

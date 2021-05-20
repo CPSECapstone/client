@@ -145,11 +145,21 @@ export default function FrameSync(annotationsService, bridge, store) {
 
     // Anchoring an annotation in the frame completed
     bridge.on('sync', function (events_) {
+      const getAnchoringStatus = (orphan, doodle) => {
+        if (orphan) {
+          if (doodle) {
+            return 'doodle';
+          }
+          return 'orphan';
+        }
+        return 'anchored';
+      };
       events_.forEach(function (event) {
         inFrame.add(event.tag);
-        anchoringStatusUpdates[event.tag] = event.msg.$orphan
-          ? 'orphan'
-          : 'anchored';
+        anchoringStatusUpdates[event.tag] = getAnchoringStatus(
+          event.msg.$orphan,
+          event.msg.$doodle
+        );
         scheduleAnchoringStatusUpdate();
       });
     });

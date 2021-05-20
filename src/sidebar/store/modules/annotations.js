@@ -86,6 +86,7 @@ function initializeAnnotation(annotation, tag) {
     $anchorTimeout: false,
     $tag: annotation.$tag || tag,
     $orphan: orphan,
+    $doodle: annotation.$doodle,
   });
 }
 
@@ -195,10 +196,11 @@ const update = {
       if (!action.statusUpdates.hasOwnProperty(annot.$tag)) {
         return annot;
       }
-
       const state = action.statusUpdates[annot.$tag];
       if (state === 'timeout') {
         return Object.assign({}, annot, { $anchorTimeout: true });
+      } else if (state === 'doodle') {
+        return Object.assign({}, annot, { $doodle: true });
       } else {
         return Object.assign({}, annot, { $orphan: state === 'orphan' });
       }
@@ -544,6 +546,16 @@ const orphanCount = createSelector(
 );
 
 /**
+ * Count the number of doodles currently in the collection
+ *
+ * @type {(state: any) => number}
+ */
+const doodleCount = createSelector(
+  state => state.annotations,
+  annotations => countIf(annotations, metadata.isDoodle)
+);
+
+/**
  * Return all loaded annotations which have been saved to the server
  *
  * @return {Annotation[]}
@@ -583,6 +595,7 @@ export default storeModule({
     newHighlights,
     noteCount,
     orphanCount,
+    doodleCount,
     savedAnnotations,
   },
 });

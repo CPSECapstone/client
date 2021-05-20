@@ -306,8 +306,7 @@ export default class Guest extends Delegator {
     });
 
     this.subscribe('annotationsLoaded', annotations => {
-      this.loadDoodles(annotations.filter(this.isDoodleAnnotation));
-      annotations.map(annotation => this.anchor(annotation));
+      annotations.forEach(annotation => this.anchor(annotation));
     });
   }
 
@@ -499,6 +498,17 @@ export default class Guest extends Delegator {
         }
       }
       annotation.$orphan = hasAnchorableTargets && !hasAnchoredTargets;
+      // An annotation is a doodle if any of its selectors have the type 'DoodleSelector'
+      annotation.$doodle = anchors.some(a => {
+        return (
+          a.target && a.target.selector?.some(s => s.type === 'DoodleSelector')
+        );
+      });
+
+      // Display the doodle on the canvas
+      if (annotation.$doodle) {
+        this.loadDoodle(annotation);
+      }
 
       // Add the anchors for this annotation to instance storage.
       this.anchors = this.anchors.concat(anchors);
@@ -796,43 +806,17 @@ export default class Guest extends Delegator {
     }
   }
 
-  /**
-   *
-   * @param {*} annotation
-   * @returns true if the annotation is a doodleAnnotation
-   */
-
-  isDoodleAnnotation(annotation) {
-    // If any of the targets have a DoodleSelector, this is a doodle annotation. Otherwise, it is not.
-    if (annotation.target) {
-      for (let targ of annotation.target) {
-        // not all targets have selectors at this point
-        if (targ.selector) {
-          for (let selector of targ.selector) {
-            if (selector.type === 'DoodleSelector') {
-              return true;
-            }
-          }
-        }
-      }
-    }
-    return false;
-  }
-
-  loadDoodles(doodleAnnotations) {
-    // First, make sure there are doodleAnnotations and a Controller
-    if (!doodleAnnotations.length || !this.doodleCanvasController) {
+  loadDoodle(doodleAnnotation) {
+    if (!this.doodleCanvasController) {
       return;
     }
 
-    // Then, load the lines into our doodleCanvasController.
+    //load the lines into our doodleCanvasController.
     let newLines = [];
-    for (let doodle of doodleAnnotations) {
-      for (let targ of doodle.target) {
-        for (let sel of targ.selector) {
-          if (sel.type === 'DoodleSelector') {
-            newLines = [...newLines, sel.line];
-          }
+    for (let targ of doodleAnnotation.target) {
+      for (let sel of targ.selector) {
+        if (sel.type === 'DoodleSelector') {
+          newLines = [...newLines, sel.line];
         }
       }
     }

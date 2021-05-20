@@ -96,6 +96,7 @@ function SelectionTabs({ isLoading, settings }) {
   const noteCount = store.noteCount();
   const annotationCount = store.annotationCount();
   const orphanCount = store.orphanCount();
+  const doodleCount = store.doodleCount();
   const isWaitingToAnchorAnnotations = store.isWaitingToAnchorAnnotations();
 
   /**
@@ -143,6 +144,17 @@ function SelectionTabs({ isLoading, settings }) {
             onSelect={() => selectTab('orphan')}
           >
             Orphans
+          </Tab>
+        )}
+        {doodleCount > 0 && (
+          <Tab
+            count={doodleCount}
+            isWaitingToAnchor={isWaitingToAnchorAnnotations}
+            isSelected={selectedTab === 'doodle'}
+            label="Doodles"
+            onSelect={() => selectTab('doodle')}
+          >
+            Doodles
           </Tab>
         )}
       </div>
