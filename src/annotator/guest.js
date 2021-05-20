@@ -807,12 +807,11 @@ export default class Guest extends Delegator {
   }
 
   loadDoodle(doodleAnnotation) {
-    // First, make sure there are doodleAnnotations and a Controller
     if (!this.doodleCanvasController) {
       return;
     }
 
-    // Then, load the lines into our doodleCanvasController.
+    //load the lines into our doodleCanvasController.
     let newLines = [];
     for (let targ of doodleAnnotation.target) {
       for (let sel of targ.selector) {

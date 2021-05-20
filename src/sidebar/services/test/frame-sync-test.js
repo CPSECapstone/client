@@ -288,14 +288,22 @@ describe('sidebar/services/frame-sync', function () {
     });
 
     it('coalesces multiple "sync" messages', () => {
-      fakeBridge.emit('sync', [{ tag: 't1', msg: { $orphan: false } }]);
-      fakeBridge.emit('sync', [{ tag: 't2', msg: { $orphan: true } }]);
+      fakeBridge.emit('sync', [
+        { tag: 't1', msg: { $orphan: false, $doodle: false } },
+      ]);
+      fakeBridge.emit('sync', [
+        { tag: 't2', msg: { $orphan: true, $doodle: false } },
+      ]);
+      fakeBridge.emit('sync', [
+        { tag: 't3', msg: { $orphan: true, $doodle: true } },
+      ]);
 
       expireDebounceTimeout();
 
       assert.calledWith(fakeStore.updateAnchorStatus, {
         t1: 'anchored',
         t2: 'orphan',
+        t3: 'doodle',
       });
     });
   });
