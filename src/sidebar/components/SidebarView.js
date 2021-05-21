@@ -56,6 +56,7 @@ function SidebarView({
   const searchUris = store.searchUris();
   const sidebarHasOpened = store.hasSidebarOpened();
   const userId = store.profile().userid;
+  //WILLNOTE we can use this to hide/show for this user!
 
   // The local `$tag` of a direct-linked annotation; populated once it
   // has anchored: meaning that it's ready to be focused and scrolled to

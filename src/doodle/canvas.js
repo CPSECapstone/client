@@ -9,7 +9,7 @@ const Canvas = ({
   handleMouseUp,
   handleMouseMove,
   handleMouseLeave,
-  lines,
+  doodles,
 }) => {
   const canvasRef = useRef(null);
 
@@ -43,12 +43,15 @@ const Canvas = ({
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Draw all of the lines (reverse order so that erasing works)
-    for (let i = lines.length - 1; i >= 0; i--) {
-      drawLine(ctx, lines[i]);
+    // Draw all of the doodles
+    for (let d = 0; d < doodles.length; d++) {
+      const doodle = doodles[d];
+      // Draw all of the lines (reverse order so that erasing works)
+      for (let i = doodle.lines.length - 1; i >= 0; i--) {
+        drawLine(ctx, doodle.lines[i]);
+      }
     }
-  }, [lines]);
+  }, [doodles]);
 
   return (
     <canvas
@@ -70,7 +73,7 @@ Canvas.propTypes = {
   handleMouseUp: propTypes.func.isRequired,
   handleMouseMove: propTypes.func.isRequired,
   handleMouseLeave: propTypes.func.isRequired,
-  lines: propTypes.array.isRequired,
+  doodles: propTypes.array.isRequired,
 };
 
 export { Canvas };

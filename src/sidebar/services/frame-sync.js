@@ -166,7 +166,7 @@ export default function FrameSync(annotationsService, bridge, store) {
 
     bridge.on('showAnnotations', function (tags) {
       store.selectAnnotations(store.findIDsForTags(tags));
-      store.selectTab('annotation');
+      store.selectTab(store.findTypeForTags(tags));
     });
 
     bridge.on('focusAnnotations', function (tags) {

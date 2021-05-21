@@ -10,7 +10,7 @@ export class DoodleController {
   constructor(container, options) {
     const { tool, size, color } = options;
     this._lines = [];
-    this._savedLines = [];
+    this._savedDoodles = [];
     this._newLines = [];
 
     this._container = container === null ? document.body : container;
@@ -41,13 +41,13 @@ export class DoodleController {
   /**
    * Update the lines and re-render on change
    */
-  set savedLines(lines) {
-    this._savedLines = lines;
+  set savedDoodles(lines) {
+    this._savedDoodles = lines;
     this.render();
   }
 
-  get savedLines() {
-    return this._savedLines;
+  get savedDoodles() {
+    return this._savedDoodles;
   }
 
   set newLines(lines) {
@@ -90,11 +90,12 @@ export class DoodleController {
     return this._doodleable;
   }
 
-  saveLines() {
-    this._savedLines = [...this._newLines, ...this._savedLines];
-    this._newLines = [];
-    this.render();
-  }
+  //TODO: can we get rid of this?
+  // saveLines() {
+  //   this._savedLines = [...this._newLines, ...this._savedLines];
+  //   this._newLines = [];
+  //   this.render();
+  // }
 
   render() {
     const setLines = lines => {
@@ -111,7 +112,10 @@ export class DoodleController {
           setLines={setLines}
           color={this._color}
         />
-        <DisplayCanvas lines={this.savedLines} container={this._container} />
+        <DisplayCanvas
+          doodles={this.savedDoodles}
+          container={this._container}
+        />
       </Fragment>,
       this.target
     );

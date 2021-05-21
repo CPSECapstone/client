@@ -1,8 +1,18 @@
 import { createElement } from 'preact';
 import { Canvas } from './canvas';
 import propTypes from 'prop-types';
+/**
+ * @typedef DisplayCanvasProps
+ * @prop {HTMLElement} container - Which element the DisplayCanvas should cover.
+ * @prop {Array<import('../types/api').Doodle>} doodles - An array of Doodles to render
+ */
 
-const DisplayCanvas = ({ container, lines }) => {
+/**
+ * Component that renders saved Doodle annotations
+ *
+ * @param {DisplayCanvasProps} props
+ */
+const DisplayCanvas = ({ container, doodles }) => {
   const boundingRect = container.getBoundingClientRect();
   return (
     <div
@@ -26,14 +36,14 @@ const DisplayCanvas = ({ container, lines }) => {
         handleMouseUp={() => {}}
         handleMouseLeave={() => {}}
         handleMouseMove={() => {}}
-        lines={lines}
+        doodles={doodles}
       />
     </div>
   );
 };
 
 DisplayCanvas.propTypes = {
-  lines: propTypes.array.isRequired,
+  doodles: propTypes.array.isRequired,
   container: propTypes.object.isRequired,
 };
 
