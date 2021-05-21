@@ -7,7 +7,7 @@ export class DoodleController {
    * @param {HTMLElement | null} container - Element into which the toolbar is rendered
    * @param {any} options
    */
-  constructor(container, options) {
+  constructor(container, options, handleDoodleClick) {
     const { tool, size, color } = options;
     this._lines = [];
     this._savedDoodles = [];
@@ -19,6 +19,7 @@ export class DoodleController {
     this._color = color;
 
     this._doodleable = false;
+    this._handleDoodleClick = handleDoodleClick;
 
     // create a new element to render into, to avoid overwriting the main page content.
     this.target = document.body.appendChild(document.createElement('div'));
@@ -113,6 +114,7 @@ export class DoodleController {
           color={this._color}
         />
         <DisplayCanvas
+          handleDoodleClick={this._handleDoodleClick}
           doodles={this.savedDoodles}
           container={this._container}
         />

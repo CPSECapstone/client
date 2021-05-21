@@ -5,6 +5,7 @@ import propTypes from 'prop-types';
  * @typedef DisplayCanvasProps
  * @prop {HTMLElement} container - Which element the DisplayCanvas should cover.
  * @prop {Array<import('../types/api').Doodle>} doodles - An array of Doodles to render
+ * @prop {(String) => any} handleDoodleClick - What to do when a doodle is clicked? Accepts the Doodle's `tag` as a prop
  */
 
 /**
@@ -12,7 +13,7 @@ import propTypes from 'prop-types';
  *
  * @param {DisplayCanvasProps} props
  */
-const DisplayCanvas = ({ container, doodles }) => {
+const DisplayCanvas = ({ container, doodles, handleDoodleClick }) => {
   const boundingRect = container.getBoundingClientRect();
   return (
     <div
@@ -37,6 +38,7 @@ const DisplayCanvas = ({ container, doodles }) => {
         handleMouseLeave={() => {}}
         handleMouseMove={() => {}}
         doodles={doodles}
+        handleDoodleClick={handleDoodleClick}
       />
     </div>
   );
@@ -45,6 +47,7 @@ const DisplayCanvas = ({ container, doodles }) => {
 DisplayCanvas.propTypes = {
   doodles: propTypes.array.isRequired,
   container: propTypes.object.isRequired,
+  handleDoodleClick: propTypes.func.isRequired,
 };
 
 export { DisplayCanvas };

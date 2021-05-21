@@ -122,6 +122,7 @@ const DoodleCanvas = ({
         handleMouseLeave={handleMouseLeave}
         handleMouseMove={handleMouseMove}
         doodles={[{ $tag: 'none', lines: lines }]}
+        handleDoodleClick={() => {}}
       />
     </div>
   );
