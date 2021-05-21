@@ -115,12 +115,7 @@ export default function Toolbar({
   const large = 10;
 
   const [toolSize, setToolSize] = useState(medium);
-
-  const [color, setColor] = useState('red');
-
-  useEffect(() => {
-    setDoodleOptions({ tool: 'pen', size: toolSize, color: color });
-  }, [toolSize, color, setDoodleOptions]);
+  const [color, setColor] = useState('#d81b60');
 
   const eraserSmall = 10;
   const eraserMedium = 30;
@@ -128,9 +123,15 @@ export default function Toolbar({
 
   const [eraserSize, setEraserSize] = useState(eraserMedium);
 
+  const [tool, setTool] = useState('pen');
+
   useEffect(() => {
-    setDoodleOptions({ tool: 'eraser', size: eraserSize });
-  }, [eraserSize, setDoodleOptions]);
+    if (tool === 'pen') {
+      setDoodleOptions({ tool: 'pen', size: toolSize, color: color });
+    } else {
+      setDoodleOptions({ tool: 'eraser', size: eraserSize });
+    }
+  }, [tool, toolSize, color, eraserSize, setEraserSize, setDoodleOptions]);
 
   function setSelected(e, optionalClass = '') {
     let elems = e.target?.parentElement.querySelectorAll(
@@ -141,14 +142,6 @@ export default function Toolbar({
       el.classList.remove('selected');
     });
     e.target?.classList.toggle('selected');
-  }
-
-  function setPen() {
-    setDoodleOptions({ tool: 'pen', size: toolSize, color: color });
-  }
-
-  function setEraser() {
-    setDoodleOptions({ tool: 'eraser', size: eraserSize, color: color });
   }
 
   if (!drawingToolbarActivated) {
@@ -228,14 +221,15 @@ export default function Toolbar({
             />
             <button
               className="popup annotator-toolbar-button 
-                toolbar pen selected"
+                toolbar selected"
+              id="pen"
               onClick={e => {
-                setPen();
+                setTool('pen');
                 //@ts-ignore
                 e.target?.querySelector('#penPopup').classList.toggle('show');
                 //@ts-ignore
                 e.target?.parentElement
-                  .querySelector('.eraser')
+                  .querySelector('#eraser')
                   .querySelector('#eraserPopup')
                   .classList.remove('show');
                 setSelected(e, '.toolbar');
@@ -284,7 +278,7 @@ export default function Toolbar({
                   <button
                     className="popup annotator-toolbar-button selected"
                     onClick={e => {
-                      setColor('d81b60');
+                      setColor('#d81b60');
                       setSelected(e);
                     }}
                     aria-label="Red"
@@ -319,16 +313,17 @@ export default function Toolbar({
             </button>
             <button
               className="popup annotator-toolbar-button 
-                toolbar eraser"
+                toolbar"
+              id="eraser"
               onClick={e => {
-                setEraser();
+                setTool('eraser');
                 e.target
                   //@ts-ignore
                   ?.querySelector('#eraserPopup')
                   .classList.toggle('show');
                 //@ts-ignore
                 e.target?.parentElement
-                  .querySelector('.pen')
+                  .querySelector('#pen')
                   .querySelector('#penPopup')
                   .classList.remove('show');
                 setSelected(e, '.toolbar');

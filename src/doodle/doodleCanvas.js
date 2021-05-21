@@ -35,11 +35,6 @@ const DoodleCanvas = ({
   const [isDrawing, setIsDrawing] = useState(false);
 
   useEffect(() => {
-    //@ts-ignore
-    document.getElementById('canvas').className = 'size' + size;
-  }, [size]);
-
-  useEffect(() => {
     if (lines.length === 0) {
       return () => {};
     }
@@ -122,6 +117,7 @@ const DoodleCanvas = ({
         handleMouseLeave={handleMouseLeave}
         handleMouseMove={handleMouseMove}
         lines={lines}
+        className={'size' + size}
       />
     </div>
   );

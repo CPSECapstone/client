@@ -10,6 +10,7 @@ const Canvas = ({
   handleMouseMove,
   handleMouseLeave,
   lines,
+  className = 'size5',
 }) => {
   const canvasRef = useRef(null);
 
@@ -60,6 +61,7 @@ const Canvas = ({
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseLeave}
       id="canvas"
+      className={className}
     />
   );
 };
@@ -72,6 +74,7 @@ Canvas.propTypes = {
   handleMouseMove: propTypes.func.isRequired,
   handleMouseLeave: propTypes.func.isRequired,
   lines: propTypes.array.isRequired,
+  className: propTypes.string,
 };
 
 export { Canvas };
