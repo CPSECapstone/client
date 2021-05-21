@@ -84,16 +84,25 @@ const Canvas = ({
       const hitCtx = hitCanvas.getContext('2d');
 
       // get the click coordinates
-      const offset = canvas.getBoundingClientRect();
-      const xPos = e.clientX - offset.left;
-      const yPos = e.clientY - offset.top;
-      // get the color of the pixel clicked on
-      const hitColor = hitCtx.getImageData(xPos, yPos, 1, 1).data;
-      // convert the color to a tag
-      const tag = colorToTag(hitColor[0], hitColor[1], hitColor[2]);
-      // call the click function with that tag. We offset tags to colors by 1 so that t-1 means there is no tag.
-      if (tag !== 't-1') {
-        handleDoodleClick(tag);
+      const boundingBox = canvas.getBoundingClientRect();
+      const xPos = e.clientX - boundingBox.left;
+      const yPos = e.clientY - boundingBox.top;
+
+      // make sure that this click happened inside the canvas
+      if (
+        xPos > 0 &&
+        xPos < boundingBox.width &&
+        yPos > 0 &&
+        yPos > boundingBox.height
+      ) {
+        // get the color of the pixel clicked ony
+        const hitColor = hitCtx.getImageData(xPos, yPos, 1, 1).data;
+        // convert the color to a tag
+        const tag = colorToTag(hitColor[0], hitColor[1], hitColor[2]);
+        // call the click function with that tag. We offset tags to colors by 1 so that t-1 means there is no tag.
+        if (tag !== 't-1') {
+          handleDoodleClick(tag);
+        }
       }
     };
 

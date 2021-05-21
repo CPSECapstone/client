@@ -64,6 +64,7 @@ describe('sidebar/services/frame-sync', function () {
         isLoggedIn: sinon.stub().returns(false),
         openSidebarPanel: sinon.stub(),
         selectAnnotations: sinon.stub(),
+        findTypeForTags: sinon.stub(),
         selectTab: sinon.stub(),
         setSidebarOpened: sinon.stub(),
         toggleSelectedAnnotations: sinon.stub(),
@@ -342,10 +343,22 @@ describe('sidebar/services/frame-sync', function () {
   describe('on "showAnnotations" message', function () {
     it('selects annotations which have an ID', function () {
       fakeStore.findIDsForTags.returns(['id1', 'id2', 'id3']);
+      fakeStore.findTypeForTags.returns('annotation');
       fakeBridge.emit('showAnnotations', ['tag1', 'tag2', 'tag3']);
 
       assert.calledWith(fakeStore.selectAnnotations, ['id1', 'id2', 'id3']);
       assert.calledWith(fakeStore.selectTab, 'annotation');
+    });
+  });
+
+  describe('on "showAnnotations" message with doodles', function () {
+    it('selects annotations which have an ID', function () {
+      fakeStore.findIDsForTags.returns(['id1', 'id2', 'id3']);
+      fakeStore.findTypeForTags.returns('doodle');
+      fakeBridge.emit('showAnnotations', ['tag1', 'tag2', 'tag3']);
+
+      assert.calledWith(fakeStore.selectAnnotations, ['id1', 'id2', 'id3']);
+      assert.calledWith(fakeStore.selectTab, 'doodle');
     });
   });
 
