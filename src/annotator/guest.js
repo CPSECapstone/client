@@ -802,7 +802,7 @@ export default class Guest extends Delegator {
    */
   clearDoodleCanvas() {
     if (this.doodleCanvasController) {
-      this.doodleCanvasController.saveLines();
+      this.doodleCanvasController.newLines = [];
     }
   }
 
@@ -820,9 +820,12 @@ export default class Guest extends Delegator {
         }
       }
     }
-    this.doodleCanvasController.savedLines = [
-      ...this.doodleCanvasController.savedLines,
-      ...newLines,
+    this.doodleCanvasController.savedDoodles = [
+      ...this.doodleCanvasController.savedDoodles,
+      {
+        $tag: doodleAnnotation.$tag,
+        lines: newLines,
+      },
     ];
   }
 }

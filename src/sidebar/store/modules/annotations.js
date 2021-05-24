@@ -443,6 +443,13 @@ function findAnnotationByID(state, id) {
 }
 
 /**
+ * Return the annotations with a given User
+ */
+function findAnnotationsByUser(state, user) {
+  return state.annotations.filter(a => a.user === user);
+}
+
+/**
  * Return the IDs of annotations that correspond to `tags`.
  *
  * If an annotation does not have an ID because it has not been created on
@@ -459,6 +466,22 @@ function findIDsForTags(state, tags) {
     }
   });
   return ids;
+}
+
+/**
+ * Return the type of the *first* saved annotation that corresponds to `tags`
+ *
+ * @param {string[]} tags - Local tags of annotations to look up
+ */
+function findTypeForTags(state, tags) {
+  for (const tag of tags) {
+    const annot = findByTag(state.annotations, tag);
+    if (annot && annot.id) {
+      return annot.$doodle ? 'doodle' : 'annotation';
+    }
+  }
+  // default to 'annotation'
+  return 'annotation';
 }
 
 /**
@@ -586,7 +609,9 @@ export default storeModule({
     annotationCount,
     annotationExists,
     findAnnotationByID,
+    findAnnotationsByUser,
     findIDsForTags,
+    findTypeForTags,
     focusedAnnotations,
     highlightedAnnotations,
     isAnnotationFocused,

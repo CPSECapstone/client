@@ -148,6 +148,10 @@ export default class Sidebar extends Guest {
         tool: 'pen',
         size: 5,
         color: 'red',
+      },
+      tag => {
+        this.crossframe?.call('showAnnotations', [tag]);
+        this.crossframe?.call('showSidebar');
       }
     );
 
