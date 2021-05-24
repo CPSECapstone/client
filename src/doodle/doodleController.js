@@ -91,13 +91,6 @@ export class DoodleController {
     return this._doodleable;
   }
 
-  //TODO: can we get rid of this?
-  // saveLines() {
-  //   this._savedLines = [...this._newLines, ...this._savedLines];
-  //   this._newLines = [];
-  //   this.render();
-  // }
-
   render() {
     const setLines = lines => {
       this.newLines = lines;
