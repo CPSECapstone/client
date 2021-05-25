@@ -69,7 +69,7 @@ const Canvas = ({
 
   const tagToColor = tag => {
     if (tag === 'none') {
-      // this is an untagged (in progress) doodle
+      // this is an unlabelled (in progress) doodle
       return '#000000';
     }
     const tagNum = parseInt(tag.substring(1), 10) + 1;
@@ -87,6 +87,7 @@ const Canvas = ({
       const boundingBox = canvas.getBoundingClientRect();
       const xPos = e.clientX - boundingBox.left;
       const yPos = e.clientY - boundingBox.top;
+
       // make sure that this click happened inside the canvas
       if (
         xPos > 0 &&
