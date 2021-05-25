@@ -69,7 +69,7 @@ const Canvas = ({
 
   const tagToColor = tag => {
     if (tag === 'none') {
-      // this is an untagged (in progress) doodle
+      // this is an unlabelled (in progress) doodle
       return '#000000';
     }
     const tagNum = parseInt(tag.substring(1), 10) + 1;
@@ -93,7 +93,7 @@ const Canvas = ({
         xPos > 0 &&
         xPos < boundingBox.width &&
         yPos > 0 &&
-        yPos > boundingBox.height
+        yPos < boundingBox.height
       ) {
         // get the color of the pixel clicked ony
         const hitColor = hitCtx.getImageData(xPos, yPos, 1, 1).data;
