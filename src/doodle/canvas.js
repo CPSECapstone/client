@@ -87,13 +87,12 @@ const Canvas = ({
       const boundingBox = canvas.getBoundingClientRect();
       const xPos = e.clientX - boundingBox.left;
       const yPos = e.clientY - boundingBox.top;
-
       // make sure that this click happened inside the canvas
       if (
         xPos > 0 &&
         xPos < boundingBox.width &&
         yPos > 0 &&
-        yPos > boundingBox.height
+        yPos < boundingBox.height
       ) {
         // get the color of the pixel clicked ony
         const hitColor = hitCtx.getImageData(xPos, yPos, 1, 1).data;
