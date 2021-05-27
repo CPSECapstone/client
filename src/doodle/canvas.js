@@ -9,7 +9,6 @@ const Canvas = ({
   handleMouseUp,
   handleMouseMove,
   handleMouseLeave,
-  lines,
   className = 'size5',
   doodles,
   handleDoodleClick,
