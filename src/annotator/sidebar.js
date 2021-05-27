@@ -135,6 +135,7 @@ export default class Sidebar extends Guest {
       createAnnotation: () => this.createAnnotation(),
       setSidebarOpen: open => (open ? this.show() : this.hide()),
       setHighlightsVisible: show => this.setAllVisibleHighlights(show),
+      setDoodlesVisible: show => this.setAllVisibleDoodles(show),
       setUserCanDoodle: show => this.setAllDoodleability(show),
       setDoodleOptions: options => this.setAllDoodleOptions(options),
       saveDoodle: () => this.saveDoodle(),
@@ -148,6 +149,10 @@ export default class Sidebar extends Guest {
         tool: 'pen',
         size: 5,
         color: '#d81b60',
+      },
+      tag => {
+        this.crossframe?.call('showAnnotations', [tag]);
+        this.crossframe?.call('showSidebar');
       }
     );
 
@@ -423,6 +428,15 @@ export default class Sidebar extends Guest {
    */
   setAllVisibleHighlights(shouldShowHighlights) {
     this.crossframe.call('setVisibleHighlights', shouldShowHighlights);
+  }
+
+  /**
+   * Hide or show doodles associated with annotations in the document.
+   *
+   * @param {boolean} shouldShowDoodles
+   */
+  setAllVisibleDoodles(shouldShowDoodles) {
+    this.crossframe.call('setVisibleDoodles', shouldShowDoodles);
   }
 
   /**

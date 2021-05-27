@@ -9,6 +9,7 @@ import { sorters } from './thread-sorters';
 /** @typedef {import('../../types/api').Annotation} Annotation */
 /** @typedef {import('./build-thread').Thread} Thread */
 /** @typedef {import('./build-thread').BuildThreadOptions} BuildThreadOptions */
+/** @typedef {import('../../types/sidebar').TabName} TabName */
 
 /**
  * @typedef ThreadState
@@ -20,7 +21,7 @@ import { sorters } from './thread-sorters';
  *   @prop {string[]} selection.forcedVisible
  *   @prop {string[]} selection.selected
  *   @prop {string} selection.sortKey
- *   @prop {'annotation'|'note'|'orphan'} selection.selectedTab
+ *   @prop {TabName} selection.selectedTab
  * @prop {string|null} route
  */
 

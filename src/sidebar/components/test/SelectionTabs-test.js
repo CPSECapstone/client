@@ -33,6 +33,7 @@ describe('SelectionTabs', function () {
       annotationCount: sinon.stub().returns(123),
       noteCount: sinon.stub().returns(456),
       orphanCount: sinon.stub().returns(0),
+      doodleCount: sinon.stub().returns(1),
       isWaitingToAnchorAnnotations: sinon.stub().returns(false),
       selectedTab: sinon.stub().returns('annotation'),
     };
@@ -92,7 +93,7 @@ describe('SelectionTabs', function () {
       fakeStore.selectedTab.returns('orphan');
       const wrapper = createComponent({});
       const tabs = wrapper.find('button');
-      assert.equal(tabs.length, 2);
+      assert.equal(tabs.length, 3);
     });
 
     it('should render `title` and `aria-label` attributes for tab buttons, with counts', () => {
@@ -200,6 +201,7 @@ describe('SelectionTabs', function () {
     { label: 'Annotations', tab: 'annotation' },
     { label: 'Page Notes', tab: 'note' },
     { label: 'Orphans', tab: 'orphan' },
+    { label: 'Doodles', tab: 'doodle' },
   ].forEach(({ label, tab }) => {
     it(`should change the selected tab when "${label}" tab is clicked`, () => {
       // Pre-select a different tab than the one we are about to click.

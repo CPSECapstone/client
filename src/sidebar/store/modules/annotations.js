@@ -86,6 +86,7 @@ function initializeAnnotation(annotation, tag) {
     $anchorTimeout: false,
     $tag: annotation.$tag || tag,
     $orphan: orphan,
+    $doodle: annotation.$doodle,
   });
 }
 
@@ -195,10 +196,11 @@ const update = {
       if (!action.statusUpdates.hasOwnProperty(annot.$tag)) {
         return annot;
       }
-
       const state = action.statusUpdates[annot.$tag];
       if (state === 'timeout') {
         return Object.assign({}, annot, { $anchorTimeout: true });
+      } else if (state === 'doodle') {
+        return Object.assign({}, annot, { $doodle: true });
       } else {
         return Object.assign({}, annot, { $orphan: state === 'orphan' });
       }
@@ -441,6 +443,13 @@ function findAnnotationByID(state, id) {
 }
 
 /**
+ * Return the annotations with a given User
+ */
+function findAnnotationsByUser(state, user) {
+  return state.annotations.filter(a => a.user === user);
+}
+
+/**
  * Return the IDs of annotations that correspond to `tags`.
  *
  * If an annotation does not have an ID because it has not been created on
@@ -457,6 +466,22 @@ function findIDsForTags(state, tags) {
     }
   });
   return ids;
+}
+
+/**
+ * Return the type of the *first* saved annotation that corresponds to `tags`
+ *
+ * @param {string[]} tags - Local tags of annotations to look up
+ */
+function findTypeForTags(state, tags) {
+  for (const tag of tags) {
+    const annot = findByTag(state.annotations, tag);
+    if (annot && annot.id) {
+      return annot.$doodle ? 'doodle' : 'annotation';
+    }
+  }
+  // default to 'annotation'
+  return 'annotation';
 }
 
 /**
@@ -544,6 +569,16 @@ const orphanCount = createSelector(
 );
 
 /**
+ * Count the number of doodles currently in the collection
+ *
+ * @type {(state: any) => number}
+ */
+const doodleCount = createSelector(
+  state => state.annotations,
+  annotations => countIf(annotations, metadata.isDoodle)
+);
+
+/**
  * Return all loaded annotations which have been saved to the server
  *
  * @return {Annotation[]}
@@ -574,7 +609,9 @@ export default storeModule({
     annotationCount,
     annotationExists,
     findAnnotationByID,
+    findAnnotationsByUser,
     findIDsForTags,
+    findTypeForTags,
     focusedAnnotations,
     highlightedAnnotations,
     isAnnotationFocused,
@@ -583,6 +620,7 @@ export default storeModule({
     newHighlights,
     noteCount,
     orphanCount,
+    doodleCount,
     savedAnnotations,
   },
 });

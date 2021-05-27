@@ -7,10 +7,10 @@ export class DoodleController {
    * @param {HTMLElement | null} container - Element into which the toolbar is rendered
    * @param {any} options
    */
-  constructor(container, options) {
+  constructor(container, options, handleDoodleClick) {
     const { tool, size, color } = options;
     this._lines = [];
-    this._savedLines = [];
+    this._savedDoodles = [];
     this._newLines = [];
 
     this._container = container === null ? document.body : container;
@@ -19,11 +19,24 @@ export class DoodleController {
     this._color = color;
 
     this._doodleable = false;
+    this._handleDoodleClick = handleDoodleClick;
+    this._showDoodles = false;
 
     // create a new element to render into, to avoid overwriting the main page content.
     this.target = document.body.appendChild(document.createElement('div'));
 
     this.render();
+  }
+
+  /**
+   * Re-render whenver doodle visibility changes
+   */
+  set showDoodles(shouldShowDoodles) {
+    this._showDoodles = shouldShowDoodles;
+    this.render();
+  }
+  get showDoodles() {
+    return this._showDoodles;
   }
 
   /**
@@ -41,13 +54,13 @@ export class DoodleController {
   /**
    * Update the lines and re-render on change
    */
-  set savedLines(lines) {
-    this._savedLines = lines;
+  set savedDoodles(lines) {
+    this._savedDoodles = lines;
     this.render();
   }
 
-  get savedLines() {
-    return this._savedLines;
+  get savedDoodles() {
+    return this._savedDoodles;
   }
 
   set newLines(lines) {
@@ -90,12 +103,6 @@ export class DoodleController {
     return this._doodleable;
   }
 
-  saveLines() {
-    this._savedLines = [...this._newLines, ...this._savedLines];
-    this._newLines = [];
-    this.render();
-  }
-
   render() {
     const setLines = lines => {
       this.newLines = lines;
@@ -111,7 +118,12 @@ export class DoodleController {
           setLines={setLines}
           color={this._color}
         />
-        <DisplayCanvas lines={this.savedLines} container={this._container} />
+        <DisplayCanvas
+          handleDoodleClick={this._handleDoodleClick}
+          doodles={this.savedDoodles}
+          container={this._container}
+          showDoodles={this._showDoodles}
+        />
       </Fragment>,
       this.target
     );

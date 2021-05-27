@@ -64,6 +64,7 @@ describe('sidebar/services/frame-sync', function () {
         isLoggedIn: sinon.stub().returns(false),
         openSidebarPanel: sinon.stub(),
         selectAnnotations: sinon.stub(),
+        findTypeForTags: sinon.stub(),
         selectTab: sinon.stub(),
         setSidebarOpened: sinon.stub(),
         toggleSelectedAnnotations: sinon.stub(),
@@ -288,14 +289,22 @@ describe('sidebar/services/frame-sync', function () {
     });
 
     it('coalesces multiple "sync" messages', () => {
-      fakeBridge.emit('sync', [{ tag: 't1', msg: { $orphan: false } }]);
-      fakeBridge.emit('sync', [{ tag: 't2', msg: { $orphan: true } }]);
+      fakeBridge.emit('sync', [
+        { tag: 't1', msg: { $orphan: false, $doodle: false } },
+      ]);
+      fakeBridge.emit('sync', [
+        { tag: 't2', msg: { $orphan: true, $doodle: false } },
+      ]);
+      fakeBridge.emit('sync', [
+        { tag: 't3', msg: { $orphan: true, $doodle: true } },
+      ]);
 
       expireDebounceTimeout();
 
       assert.calledWith(fakeStore.updateAnchorStatus, {
         t1: 'anchored',
         t2: 'orphan',
+        t3: 'doodle',
       });
     });
   });
@@ -334,10 +343,22 @@ describe('sidebar/services/frame-sync', function () {
   describe('on "showAnnotations" message', function () {
     it('selects annotations which have an ID', function () {
       fakeStore.findIDsForTags.returns(['id1', 'id2', 'id3']);
+      fakeStore.findTypeForTags.returns('annotation');
       fakeBridge.emit('showAnnotations', ['tag1', 'tag2', 'tag3']);
 
       assert.calledWith(fakeStore.selectAnnotations, ['id1', 'id2', 'id3']);
       assert.calledWith(fakeStore.selectTab, 'annotation');
+    });
+  });
+
+  describe('on "showAnnotations" message with doodles', function () {
+    it('selects annotations which have an ID', function () {
+      fakeStore.findIDsForTags.returns(['id1', 'id2', 'id3']);
+      fakeStore.findTypeForTags.returns('doodle');
+      fakeBridge.emit('showAnnotations', ['tag1', 'tag2', 'tag3']);
+
+      assert.calledWith(fakeStore.selectAnnotations, ['id1', 'id2', 'id3']);
+      assert.calledWith(fakeStore.selectTab, 'doodle');
     });
   });
 
@@ -385,6 +406,12 @@ describe('sidebar/services/frame-sync', function () {
       fakeBridge.emit('setVisibleHighlights');
 
       assert.calledWith(fakeBridge.call, 'setVisibleHighlights');
+    });
+
+    it('calls "setVisibleDoodles"', function () {
+      fakeBridge.emit('setVisibleDoodles');
+
+      assert.calledWith(fakeBridge.call, 'setVisibleDoodles');
     });
   });
 

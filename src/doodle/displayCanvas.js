@@ -1,8 +1,25 @@
 import { createElement } from 'preact';
 import { Canvas } from './canvas';
 import propTypes from 'prop-types';
+/**
+ * @typedef DisplayCanvasProps
+ * @prop {HTMLElement} container - Which element the DisplayCanvas should cover.
+ * @prop {Array<import('../types/api').Doodle>} doodles - An array of Doodles to render
+ * @prop {Boolean} showDoodles - An array of Doodles to render
+ * @prop {(String) => any} handleDoodleClick - What to do when a doodle is clicked? Accepts the Doodle's `tag` as a prop
+ */
 
-const DisplayCanvas = ({ container, lines }) => {
+/**
+ * Component that renders saved Doodle annotations
+ *
+ * @param {DisplayCanvasProps} props
+ */
+const DisplayCanvas = ({
+  container,
+  doodles,
+  handleDoodleClick,
+  showDoodles,
+}) => {
   const boundingRect = container.getBoundingClientRect();
   return (
     <div
@@ -12,6 +29,7 @@ const DisplayCanvas = ({ container, lines }) => {
         left: boundingRect.left + window.scrollX,
         zIndex: 9998,
         pointerEvents: 'none',
+        display: showDoodles ? undefined : 'none',
       }}
     >
       <Canvas
@@ -26,15 +44,18 @@ const DisplayCanvas = ({ container, lines }) => {
         handleMouseUp={() => {}}
         handleMouseLeave={() => {}}
         handleMouseMove={() => {}}
-        lines={lines}
+        doodles={doodles}
+        handleDoodleClick={handleDoodleClick}
       />
     </div>
   );
 };
 
 DisplayCanvas.propTypes = {
-  lines: propTypes.array.isRequired,
+  doodles: propTypes.array.isRequired,
   container: propTypes.object.isRequired,
+  handleDoodleClick: propTypes.func.isRequired,
+  showDoodles: propTypes.bool.isRequired,
 };
 
 export { DisplayCanvas };

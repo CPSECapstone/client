@@ -553,6 +553,13 @@ describe('Sidebar', () => {
       assert.calledWith(fakeCrossFrame.call, 'setVisibleHighlights', true);
     }));
 
+  describe('#setAllVisibleDoodles', () =>
+    it('sets the doodle state through crossframe and emits', () => {
+      const sidebar = createSidebar({});
+      sidebar.setAllVisibleDoodles(true);
+      assert.calledWith(fakeCrossFrame.call, 'setVisibleDoodles', true);
+    }));
+
   it('hides toolbar controls when using the "clean" theme', () => {
     createSidebar({ theme: 'clean' });
     assert.equal(fakeToolbar.useMinimalControls, true);

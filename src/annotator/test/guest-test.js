@@ -206,36 +206,6 @@ describe('Guest', () => {
         assert.calledWith(guest.anchor, ann2);
       });
 
-      it('calls loadDoodles with only doodle annotations on "annotationsLoaded"', () => {
-        const ann1 = {
-          id: 1,
-          $tag: 'tag1',
-          target: [
-            {
-              selector: [
-                {
-                  type: 'DoodleSelector',
-                  line: {
-                    points: [
-                      [1, 1],
-                      [2, 2],
-                    ],
-                    size: 5,
-                    color: '#FF0000',
-                    tool: 'pen',
-                  },
-                },
-              ],
-            },
-          ],
-        };
-        const ann2 = { id: 2, $tag: 'tag2' };
-        sandbox.stub(guest, 'anchor');
-        options.emit('annotationsLoaded', [ann1, ann2]);
-        assert.calledOnce(guest.loadDoodles);
-        assert.calledWith(guest.loadDoodles, [ann1]);
-      });
-
       it('proxies all other events into the annotator event system', () => {
         const fooHandler = sandbox.stub();
         const barHandler = sandbox.stub();
@@ -689,6 +659,36 @@ describe('Guest', () => {
       return guest
         .anchor(annotation)
         .then(() => assert.isFalse(annotation.$orphan));
+    });
+
+    it('marks an annotation with DoodleSelectors as a doodle', () => {
+      const guest = createGuest();
+      const annotation = {
+        id: 1,
+        $tag: 'tag1',
+        target: [
+          {
+            selector: [
+              {
+                type: 'DoodleSelector',
+                line: {
+                  points: [
+                    [1, 1],
+                    [2, 2],
+                  ],
+                  size: 5,
+                  color: '#FF0000',
+                  tool: 'pen',
+                },
+              },
+            ],
+          },
+        ],
+      };
+
+      return guest
+        .anchor(annotation)
+        .then(() => assert.isTrue(annotation.$doodle));
     });
 
     it("doesn't mark an annotation with a selectorless target as an orphan", () => {

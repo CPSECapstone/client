@@ -119,6 +119,7 @@ export default class Guest extends Delegator {
     super(element, { ...defaultConfig, ...config });
 
     this.visibleHighlights = false;
+    this.visibleDoodles = false;
 
     /** @type {ToolbarController|null} */
     this.toolbar = null;
@@ -298,6 +299,7 @@ export default class Guest extends Delegator {
   _setupInitialState(config) {
     this.publish('panelReady');
     this.setVisibleHighlights(config.showHighlights === 'always');
+    this.setVisibleDoodles(config.showHighlights === 'always');
   }
 
   _connectAnnotationSync() {
@@ -306,8 +308,7 @@ export default class Guest extends Delegator {
     });
 
     this.subscribe('annotationsLoaded', annotations => {
-      this.loadDoodles(annotations.filter(this.isDoodleAnnotation));
-      annotations.map(annotation => this.anchor(annotation));
+      annotations.forEach(annotation => this.anchor(annotation));
     });
   }
 
@@ -352,6 +353,10 @@ export default class Guest extends Delegator {
 
     crossframe.on('setVisibleHighlights', state => {
       this.setVisibleHighlights(state);
+    });
+
+    crossframe.on('setVisibleDoodles', state => {
+      this.setVisibleDoodles(state);
     });
 
     crossframe.on('setDoodleability', state => {
@@ -499,6 +504,17 @@ export default class Guest extends Delegator {
         }
       }
       annotation.$orphan = hasAnchorableTargets && !hasAnchoredTargets;
+      // An annotation is a doodle if any of its selectors have the type 'DoodleSelector'
+      annotation.$doodle = anchors.some(a => {
+        return (
+          a.target && a.target.selector?.some(s => s.type === 'DoodleSelector')
+        );
+      });
+
+      // Display the doodle on the canvas
+      if (annotation.$doodle) {
+        this.loadDoodle(annotation);
+      }
 
       // Add the anchors for this annotation to instance storage.
       this.anchors = this.anchors.concat(anchors);
@@ -745,6 +761,22 @@ export default class Guest extends Delegator {
   }
 
   /**
+   * Set whether doodles are visible in the document or not.
+   *
+   * @param {boolean} shouldShowDoodles
+   */
+  setVisibleDoodles(shouldShowDoodles) {
+    if (this.doodleCanvasController) {
+      this.doodleCanvasController.showDoodles = shouldShowDoodles;
+    }
+
+    this.visibleDoodles = shouldShowDoodles;
+    if (this.toolbar) {
+      this.toolbar.doodlesVisible = shouldShowDoodles;
+    }
+  }
+
+  /**
    * Set whether the document can be doodled on
    *
    * @param {boolean} shouldBeDoodleable
@@ -792,53 +824,30 @@ export default class Guest extends Delegator {
    */
   clearDoodleCanvas() {
     if (this.doodleCanvasController) {
-      this.doodleCanvasController.saveLines();
+      this.doodleCanvasController.newLines = [];
     }
   }
 
-  /**
-   *
-   * @param {*} annotation
-   * @returns true if the annotation is a doodleAnnotation
-   */
-
-  isDoodleAnnotation(annotation) {
-    // If any of the targets have a DoodleSelector, this is a doodle annotation. Otherwise, it is not.
-    if (annotation.target) {
-      for (let targ of annotation.target) {
-        // not all targets have selectors at this point
-        if (targ.selector) {
-          for (let selector of targ.selector) {
-            if (selector.type === 'DoodleSelector') {
-              return true;
-            }
-          }
-        }
-      }
-    }
-    return false;
-  }
-
-  loadDoodles(doodleAnnotations) {
-    // First, make sure there are doodleAnnotations and a Controller
-    if (!doodleAnnotations.length || !this.doodleCanvasController) {
+  loadDoodle(doodleAnnotation) {
+    if (!this.doodleCanvasController) {
       return;
     }
 
-    // Then, load the lines into our doodleCanvasController.
+    //load the lines into our doodleCanvasController.
     let newLines = [];
-    for (let doodle of doodleAnnotations) {
-      for (let targ of doodle.target) {
-        for (let sel of targ.selector) {
-          if (sel.type === 'DoodleSelector') {
-            newLines = [...newLines, sel.line];
-          }
+    for (let targ of doodleAnnotation.target) {
+      for (let sel of targ.selector) {
+        if (sel.type === 'DoodleSelector') {
+          newLines = [...newLines, sel.line];
         }
       }
     }
-    this.doodleCanvasController.savedLines = [
-      ...this.doodleCanvasController.savedLines,
-      ...newLines,
+    this.doodleCanvasController.savedDoodles = [
+      ...this.doodleCanvasController.savedDoodles,
+      {
+        $tag: doodleAnnotation.$tag,
+        lines: newLines,
+      },
     ];
   }
 }

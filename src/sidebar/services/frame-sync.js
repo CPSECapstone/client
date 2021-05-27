@@ -145,18 +145,28 @@ export default function FrameSync(annotationsService, bridge, store) {
 
     // Anchoring an annotation in the frame completed
     bridge.on('sync', function (events_) {
+      const getAnchoringStatus = (orphan, doodle) => {
+        if (orphan) {
+          if (doodle) {
+            return 'doodle';
+          }
+          return 'orphan';
+        }
+        return 'anchored';
+      };
       events_.forEach(function (event) {
         inFrame.add(event.tag);
-        anchoringStatusUpdates[event.tag] = event.msg.$orphan
-          ? 'orphan'
-          : 'anchored';
+        anchoringStatusUpdates[event.tag] = getAnchoringStatus(
+          event.msg.$orphan,
+          event.msg.$doodle
+        );
         scheduleAnchoringStatusUpdate();
       });
     });
 
     bridge.on('showAnnotations', function (tags) {
       store.selectAnnotations(store.findIDsForTags(tags));
-      store.selectTab('annotation');
+      store.selectTab(store.findTypeForTags(tags));
     });
 
     bridge.on('focusAnnotations', function (tags) {
@@ -180,6 +190,9 @@ export default function FrameSync(annotationsService, bridge, store) {
     });
     bridge.on('setVisibleHighlights', function (state) {
       bridge.call('setVisibleHighlights', state);
+    });
+    bridge.on('setVisibleDoodles', function (state) {
+      bridge.call('setVisibleDoodles', state);
     });
     bridge.on('setDoodleability', function (state) {
       bridge.call('setDoodleability', state);

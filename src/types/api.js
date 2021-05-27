@@ -54,6 +54,12 @@
  */
 
 /**
+ * @typedef Doodle
+ * @prop {string} $tag
+ * @prop {Array<DoodleLine>} lines
+ */
+
+/**
  * TODO - Fill out remaining properties
  *
  * @typedef Annotation

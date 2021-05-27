@@ -15,11 +15,7 @@ import propTypes from 'prop-types';
  */
 
 /**
- * Component that renders icons using inline `<svg>` elements.
- * This enables their appearance to be customized via CSS.
- *
- * This matches the way we do icons on the website, see
- * https://github.com/hypothesis/h/pull/3675
+ * Component that renders a canvas for users to draw Doodles on.
  *
  * @param {DoodleCanvasProps} props
  */
@@ -33,6 +29,11 @@ const DoodleCanvas = ({
   setLines,
 }) => {
   const [isDrawing, setIsDrawing] = useState(false);
+  const [everActive, setEverActive] = useState(false);
+
+  if (active && !everActive) {
+    setEverActive(true);
+  }
 
   useEffect(() => {
     if (lines.length === 0) {
@@ -93,6 +94,10 @@ const DoodleCanvas = ({
     setLines([newLine, ...rest]);
   };
 
+  if (!everActive) {
+    return null;
+  }
+
   return (
     <div
       style={{
@@ -116,8 +121,9 @@ const DoodleCanvas = ({
         handleMouseUp={handleMouseUp}
         handleMouseLeave={handleMouseLeave}
         handleMouseMove={handleMouseMove}
-        lines={lines}
         className={'size' + size}
+        doodles={[{ $tag: 'none', lines: lines }]}
+        handleDoodleClick={() => {}}
       />
     </div>
   );
@@ -127,9 +133,9 @@ DoodleCanvas.propTypes = {
   tool: propTypes.string.isRequired,
   size: propTypes.number.isRequired,
   active: propTypes.bool.isRequired,
+  color: propTypes.string.isRequired,
   lines: propTypes.array.isRequired,
   setLines: propTypes.func.isRequired,
-  color: propTypes.string.isRequired,
   attachedElement: propTypes.any.isRequired,
 };
 
