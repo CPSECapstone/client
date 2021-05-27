@@ -9,6 +9,7 @@ const Canvas = ({
   handleMouseUp,
   handleMouseMove,
   handleMouseLeave,
+  className = 'size5',
   doodles,
   handleDoodleClick,
 }) => {
@@ -139,6 +140,8 @@ const Canvas = ({
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseLeave}
+        id="canvas"
+        className={className}
       />
       <canvas
         width={width}
@@ -157,6 +160,7 @@ Canvas.propTypes = {
   handleMouseUp: propTypes.func.isRequired,
   handleMouseMove: propTypes.func.isRequired,
   handleMouseLeave: propTypes.func.isRequired,
+  className: propTypes.string,
   handleDoodleClick: propTypes.func.isRequired,
   doodles: propTypes.array.isRequired,
 };

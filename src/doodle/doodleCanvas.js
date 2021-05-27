@@ -121,6 +121,7 @@ const DoodleCanvas = ({
         handleMouseUp={handleMouseUp}
         handleMouseLeave={handleMouseLeave}
         handleMouseMove={handleMouseMove}
+        className={'size' + size}
         doodles={[{ $tag: 'none', lines: lines }]}
         handleDoodleClick={() => {}}
       />

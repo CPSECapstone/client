@@ -6,14 +6,29 @@
 @use '../mixins/layout';
 @use '../mixins/utils';
 
-#myPopup {
-  pointer-events: auto;
-}
-
 .popup > * {
   pointer-events: none;
 }
-// semantic html radio button
+
+.size1 {
+  cursor: url('../images/icons/circle1.svg') 1 1, auto;
+}
+
+.size5 {
+  cursor: url('../images/icons/circle5.svg') 2 2, auto;
+}
+
+.size10 {
+  cursor: url('../images/icons/circle10.svg') 5 5, auto;
+}
+
+.size30 {
+  cursor: url('../images/icons/circle30.svg') 15 15, auto;
+}
+
+.size60 {
+  cursor: url('../images/icons/circle60.svg') 30 30, auto;
+}
 
 // note: These components CSS classes are nested inside
 // .annotator-frame to avoid being overridden by the
@@ -23,6 +38,14 @@
   // the vertical toolbar at the left-edge of the sidebar
   // which provides controls for toggling the sidebar,
   // toggling highlights etc.
+
+  #eraserPopup {
+    pointer-events: auto;
+  }
+
+  #penPopup {
+    pointer-events: auto;
+  }
 
   /* Popup container */
   .popup {
@@ -42,7 +65,7 @@
     position: absolute;
     z-index: 1;
     bottom: -125%;
-    left: 145%;
+    left: 0%;
     margin-left: -80px;
   }
 
@@ -51,11 +74,15 @@
     content: '';
     position: absolute;
     top: 45%;
-    left: 110%;
-    margin-left: -5px;
+    left: 100%;
     border-width: 5px;
     border-style: solid;
     border-color: transparent transparent transparent #555;
+  }
+
+  /* The actual popup (appears on top) */
+  #eraserPopup {
+    left: 120%;
   }
 
   /* Toggle this class when clicking on the popup container (hide and show the popup) */
@@ -63,6 +90,19 @@
     visibility: visible;
     -webkit-animation: fadeIn 1s;
     animation: fadeIn 1s;
+  }
+
+  // Color and size sub toolbars
+  .popup .popup-child {
+    width: 50%;
+    float: left;
+    padding: 0.2em;
+  }
+
+  // Selected toolbar button
+  .annotator-toolbar-button.selected {
+    background-color: rgb(175, 175, 175);
+    border: 1px solid black;
   }
 
   /* Add animation (fade in the popup) */
