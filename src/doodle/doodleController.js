@@ -109,24 +109,21 @@ export class DoodleController {
     };
     render(
       <Fragment>
-        {this._showDoodles && (
-          <Fragment>
-            <DoodleCanvas
-              attachedElement={this._container}
-              size={this._size}
-              tool={this._tool}
-              active={this._doodleable}
-              lines={this.newLines}
-              setLines={setLines}
-              color={this._color}
-            />
-            <DisplayCanvas
-              handleDoodleClick={this._handleDoodleClick}
-              doodles={this.savedDoodles}
-              container={this._container}
-            />
-          </Fragment>
-        )}
+        <DoodleCanvas
+          attachedElement={this._container}
+          size={this._size}
+          tool={this._tool}
+          active={this._doodleable}
+          lines={this.newLines}
+          setLines={setLines}
+          color={this._color}
+        />
+        <DisplayCanvas
+          handleDoodleClick={this._handleDoodleClick}
+          doodles={this.savedDoodles}
+          container={this._container}
+          showDoodles={this._showDoodles}
+        />
       </Fragment>,
       this.target
     );
