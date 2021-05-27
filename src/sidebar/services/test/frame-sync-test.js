@@ -407,6 +407,12 @@ describe('sidebar/services/frame-sync', function () {
 
       assert.calledWith(fakeBridge.call, 'setVisibleHighlights');
     });
+
+    it('calls "setVisibleDoodles"', function () {
+      fakeBridge.emit('setVisibleDoodles');
+
+      assert.calledWith(fakeBridge.call, 'setVisibleDoodles');
+    });
   });
 
   describe('when annotations are focused in the sidebar', () => {
