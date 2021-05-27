@@ -191,6 +191,9 @@ export default function FrameSync(annotationsService, bridge, store) {
     bridge.on('setVisibleHighlights', function (state) {
       bridge.call('setVisibleHighlights', state);
     });
+    bridge.on('setVisibleDoodles', function (state) {
+      bridge.call('setVisibleDoodles', state);
+    });
     bridge.on('setDoodleability', function (state) {
       bridge.call('setDoodleability', state);
     });

@@ -69,8 +69,11 @@ ToolbarButton.propTypes = {
  *   Icon to show on the "Create annotation" button indicating what kind of annotation
  *   will be created.
  * @prop {boolean} showHighlights - Are highlights currently visible in the document?
+ * @prop {boolean} showDoodles - Are doodles currently visible in the document?
  * @prop {() => any} toggleHighlights -
  *   Callback to toggle visibility of highlights in the document.
+ * @prop {() => any} toggleDoodles -
+ *   Callback to toggle visibility of doodles in the document.
  * @prop {() => any} toggleSidebar -
  *   Callback to toggle the visibility of the sidebar.
  * @prop {(object) => any} setDoodleOptions
@@ -101,7 +104,9 @@ export default function Toolbar({
   isSidebarOpen,
   newAnnotationType,
   showHighlights,
+  showDoodles,
   toggleHighlights,
+  toggleDoodles,
   toggleSidebar,
   setDoodleOptions,
   saveDoodle,
@@ -152,6 +157,12 @@ export default function Toolbar({
               icon={showHighlights ? 'show' : 'hide'}
               selected={showHighlights}
               onClick={toggleHighlights}
+            />
+            <ToolbarButton
+              label="Show Doodles"
+              icon={showDoodles ? 'show' : 'hide'}
+              selected={showDoodles}
+              onClick={toggleDoodles}
             />
             <ToolbarButton
               label={
