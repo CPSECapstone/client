@@ -119,6 +119,7 @@ export default class Guest extends Delegator {
     super(element, { ...defaultConfig, ...config });
 
     this.visibleHighlights = false;
+    this.visibleDoodles = false;
 
     /** @type {ToolbarController|null} */
     this.toolbar = null;
@@ -298,6 +299,7 @@ export default class Guest extends Delegator {
   _setupInitialState(config) {
     this.publish('panelReady');
     this.setVisibleHighlights(config.showHighlights === 'always');
+    this.setVisibleDoodles(config.showHighlights === 'always');
   }
 
   _connectAnnotationSync() {
@@ -351,6 +353,10 @@ export default class Guest extends Delegator {
 
     crossframe.on('setVisibleHighlights', state => {
       this.setVisibleHighlights(state);
+    });
+
+    crossframe.on('setVisibleDoodles', state => {
+      this.setVisibleDoodles(state);
     });
 
     crossframe.on('setDoodleability', state => {
@@ -751,6 +757,22 @@ export default class Guest extends Delegator {
     this.visibleHighlights = shouldShowHighlights;
     if (this.toolbar) {
       this.toolbar.highlightsVisible = shouldShowHighlights;
+    }
+  }
+
+  /**
+   * Set whether doodles are visible in the document or not.
+   *
+   * @param {boolean} shouldShowDoodles
+   */
+  setVisibleDoodles(shouldShowDoodles) {
+    if (this.doodleCanvasController) {
+      this.doodleCanvasController.showDoodles = shouldShowDoodles;
+    }
+
+    this.visibleDoodles = shouldShowDoodles;
+    if (this.toolbar) {
+      this.toolbar.doodlesVisible = shouldShowDoodles;
     }
   }
 

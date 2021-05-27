@@ -7,6 +7,7 @@ import Toolbar from './components/toolbar';
  * @prop {() => any} createAnnotation
  * @prop {(open: boolean) => any} setSidebarOpen
  * @prop {(visible: boolean) => any} setHighlightsVisible
+ * @prop {(visible: boolean) => any} setDoodlesVisible
  * @prop {(doodleable: boolean) => any} setUserCanDoodle
  * @prop {(doodleable: boolean) => any} setDoodleOptions
  * @prop {() => any} saveDoodle
@@ -28,6 +29,7 @@ export class ToolbarController {
       createAnnotation,
       setSidebarOpen,
       setHighlightsVisible,
+      setDoodlesVisible,
       setUserCanDoodle,
       setDoodleOptions,
       saveDoodle,
@@ -46,11 +48,13 @@ export class ToolbarController {
     this._highlightsVisible = false;
     this._sidebarOpen = false;
     this._doodleable = false;
+    this._doodlesVisible = false;
 
     this._closeSidebar = () => setSidebarOpen(false);
     this._toggleSidebar = () => setSidebarOpen(!this._sidebarOpen);
     this._toggleHighlights = () =>
       setHighlightsVisible(!this._highlightsVisible);
+    this._toggleDoodles = () => setDoodlesVisible(!this._doodlesVisible);
     this._toggleDoodleToolbar = () => {
       this._drawingToolbar = !this._drawingToolbar;
       this._doodleable = this._drawingToolbar;
@@ -130,6 +134,18 @@ export class ToolbarController {
   }
 
   /**
+   * Update the toolbar to reflect whether doodles are currently visible
+   */
+  set doodlesVisible(visible) {
+    this._doodlesVisible = visible;
+    this.render();
+  }
+
+  get doodlesVisible() {
+    return this._doodlesVisible;
+  }
+
+  /**
    * Return the DOM element that toggles the sidebar's visibility.
    *
    * @type {HTMLButtonElement}
@@ -146,7 +162,9 @@ export class ToolbarController {
         newAnnotationType={this._newAnnotationType}
         isSidebarOpen={this._sidebarOpen}
         showHighlights={this._highlightsVisible}
+        showDoodles={this._doodlesVisible}
         toggleHighlights={this._toggleHighlights}
+        toggleDoodles={this._toggleDoodles}
         toggleSidebar={this._toggleSidebar}
         toggleSidebarRef={this._sidebarToggleButton}
         useMinimalControls={this.useMinimalControls}

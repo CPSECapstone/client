@@ -20,11 +20,23 @@ export class DoodleController {
 
     this._doodleable = false;
     this._handleDoodleClick = handleDoodleClick;
+    this._showDoodles = false;
 
     // create a new element to render into, to avoid overwriting the main page content.
     this.target = document.body.appendChild(document.createElement('div'));
 
     this.render();
+  }
+
+  /**
+   * Re-render whenver doodle visibility changes
+   */
+  set showDoodles(shouldShowDoodles) {
+    this._showDoodles = shouldShowDoodles;
+    this.render();
+  }
+  get showDoodles() {
+    return this._showDoodles;
   }
 
   /**
@@ -97,20 +109,24 @@ export class DoodleController {
     };
     render(
       <Fragment>
-        <DoodleCanvas
-          attachedElement={this._container}
-          size={this._size}
-          tool={this._tool}
-          active={this._doodleable}
-          lines={this.newLines}
-          setLines={setLines}
-          color={this._color}
-        />
-        <DisplayCanvas
-          handleDoodleClick={this._handleDoodleClick}
-          doodles={this.savedDoodles}
-          container={this._container}
-        />
+        {this._showDoodles && (
+          <Fragment>
+            <DoodleCanvas
+              attachedElement={this._container}
+              size={this._size}
+              tool={this._tool}
+              active={this._doodleable}
+              lines={this.newLines}
+              setLines={setLines}
+              color={this._color}
+            />
+            <DisplayCanvas
+              handleDoodleClick={this._handleDoodleClick}
+              doodles={this.savedDoodles}
+              container={this._container}
+            />
+          </Fragment>
+        )}
       </Fragment>,
       this.target
     );
