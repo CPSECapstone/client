@@ -367,15 +367,7 @@ export default class Guest extends Delegator {
     crossframe.on('setDoodleOptions', state => {
       this.setDoodleOptions(state);
     });
-    /*
-      crossframe.on('undoDoodle', () => {
-          this.undoDoodle();
-      });
 
-      crossframe.on('redoDoodle', () => {
-          this.redoDoodle();
-      });
-      */
     crossframe.on('saveCurrentDoodle', () => {
       this.saveCurrentDoodle();
     });
