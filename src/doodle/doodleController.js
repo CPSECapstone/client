@@ -12,6 +12,7 @@ export class DoodleController {
     this._lines = [];
     this._savedDoodles = [];
     this._newLines = [];
+    this._redoLines = [];
 
     this._container = container === null ? document.body : container;
     this._tool = tool;
@@ -65,6 +66,7 @@ export class DoodleController {
 
   set newLines(lines) {
     this._newLines = lines;
+    this._redoLines = []; // Clear redo queue when doodle changes
     this.render();
   }
 
@@ -103,6 +105,19 @@ export class DoodleController {
     return this._doodleable;
   }
 
+  undo() {
+    if (this._newLines.length) {
+      this._redoLines.push(this._newLines.shift());
+      this.render();
+    }
+  }
+  redo() {
+    if (this._redoLines.length) {
+      this._newLines = [this._redoLines.pop(), ...this._newLines];
+      this.render();
+    }
+  }
+
   render() {
     const setLines = lines => {
       this.newLines = lines;
@@ -117,6 +132,8 @@ export class DoodleController {
           lines={this.newLines}
           setLines={setLines}
           color={this._color}
+          onUndo={this.undo.bind(this)}
+          onRedo={this.redo.bind(this)}
         />
         <DisplayCanvas
           handleDoodleClick={this._handleDoodleClick}

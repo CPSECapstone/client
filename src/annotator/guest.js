@@ -22,6 +22,7 @@ import { normalizeURI } from './util/url';
  * @typedef {import('../types/annotator').Anchor} Anchor
  * @typedef {import('../types/api').Target} Target
  * @typedef {import('./toolbar').ToolbarController} ToolbarController
+ * @typedef {import('../doodle/doodleController').DoodleController} DoodleController
  */
 
 /**
@@ -124,7 +125,7 @@ export default class Guest extends Delegator {
     /** @type {ToolbarController|null} */
     this.toolbar = null;
 
-    /** TODO add this type back while still passing linter {DoodleController|null}* } */
+    /** @type {DoodleController|null} */
     this.doodleCanvasController = null;
 
     this.adderToolbar = document.createElement('hypothesis-adder');
@@ -366,7 +367,15 @@ export default class Guest extends Delegator {
     crossframe.on('setDoodleOptions', state => {
       this.setDoodleOptions(state);
     });
+    /*
+      crossframe.on('undoDoodle', () => {
+          this.undoDoodle();
+      });
 
+      crossframe.on('redoDoodle', () => {
+          this.redoDoodle();
+      });
+      */
     crossframe.on('saveCurrentDoodle', () => {
       this.saveCurrentDoodle();
     });
@@ -806,6 +815,19 @@ export default class Guest extends Delegator {
     }
   }
 
+  /**
+   * Undo a doodle line
+   */
+  undoDoodle() {
+    this.doodleCanvasController?.undo();
+  }
+
+  /**
+   * Re-add a line that was removed with "undo"
+   */
+  redoDoodle() {
+    this.doodleCanvasController?.redo();
+  }
   /**
    * Save the doodle
    */
