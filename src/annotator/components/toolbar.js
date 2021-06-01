@@ -78,6 +78,10 @@ ToolbarButton.propTypes = {
  *   Callback to toggle the visibility of the sidebar.
  * @prop {(object) => any} setDoodleOptions
  *   Callback to set the options of the doodle canvas
+ * @prop {() => any} undoDoodle
+ *   Callback to undo the last drawn line
+ * @prop {() => any} redoDoodle
+ *   Callback to undo the last doodle undo
  * @prop {() => any} saveDoodle
  *   Callback to set the options of the doodle canvas
  * @prop {import("preact").Ref<HTMLButtonElement>} [toggleSidebarRef] -
@@ -109,6 +113,8 @@ export default function Toolbar({
   toggleDoodles,
   toggleSidebar,
   setDoodleOptions,
+  undoDoodle,
+  redoDoodle,
   saveDoodle,
   toggleSidebarRef,
   useMinimalControls = false,
@@ -381,6 +387,8 @@ export default function Toolbar({
                 </div>
               </span>
             </button>
+            <ToolbarButton label="Undo" icon="undo" onClick={undoDoodle} />
+            <ToolbarButton label="Redo" icon="redo" onClick={redoDoodle} />
             <ToolbarButton
               label="Save"
               icon="save"

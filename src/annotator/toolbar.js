@@ -10,6 +10,8 @@ import Toolbar from './components/toolbar';
  * @prop {(visible: boolean) => any} setDoodlesVisible
  * @prop {(doodleable: boolean) => any} setUserCanDoodle
  * @prop {(doodleable: boolean) => any} setDoodleOptions
+ * @prop {() => any} undoDoodle
+ * @prop {() => any} redoDoodle
  * @prop {() => any} saveDoodle
  */
 
@@ -32,6 +34,8 @@ export class ToolbarController {
       setDoodlesVisible,
       setUserCanDoodle,
       setDoodleOptions,
+      undoDoodle,
+      redoDoodle,
       saveDoodle,
     } = options;
 
@@ -67,6 +71,12 @@ export class ToolbarController {
     this._createAnnotation = () => {
       createAnnotation();
       setSidebarOpen(true);
+    };
+    this._undoDoodle = () => {
+      undoDoodle();
+    };
+    this._redoDoodle = () => {
+      redoDoodle();
     };
     this._saveDoodle = () => {
       saveDoodle();
@@ -171,6 +181,8 @@ export class ToolbarController {
         setDoodleOptions={this._setDoodleOptions}
         drawingToolbarActivated={this._drawingToolbar}
         drawingToolbarToggle={this._toggleDoodleToolbar}
+        undoDoodle={this._undoDoodle}
+        redoDoodle={this._redoDoodle}
         saveDoodle={this._saveDoodle}
       />,
       this._container

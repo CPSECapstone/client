@@ -12,6 +12,8 @@ import propTypes from 'prop-types';
  * @prop {HTMLElement} attachedElement - Which element the DoodleCanvas should cover.
  * @prop {Array<import('../types/api').DoodleLine>} lines - An array of lines that compose this doodle.
  * @prop {Function} setLines - A function to set the lines
+ * @prop {Function} onUndo - a function called when undo key commands pressed
+ * @prop {Function} onRedo - a function called when redo key commands pressed
  */
 
 /**
@@ -27,6 +29,8 @@ const DoodleCanvas = ({
   attachedElement,
   lines,
   setLines,
+  onUndo,
+  onRedo,
 }) => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [everActive, setEverActive] = useState(false);
@@ -35,6 +39,27 @@ const DoodleCanvas = ({
     setEverActive(true);
   }
 
+  useEffect(() => {
+    const KEY_UNDO = 90; // Code for "Z" key
+    const KEY_REDO = 89; // Code for "Y" key
+    if (!active) {
+      return () => {};
+    }
+    const listener = e => {
+      const key = e.charCode || e.keyCode;
+      if (e.ctrlKey) {
+        if (key === KEY_UNDO) {
+          onUndo();
+        } else if (key === KEY_REDO) {
+          onRedo();
+        }
+      }
+    };
+    document.addEventListener('keydown', listener);
+    return () => {
+      document.removeEventListener('keydown', listener);
+    };
+  }, [active, onUndo, onRedo]);
   useEffect(() => {
     if (lines.length === 0) {
       return () => {};
@@ -50,7 +75,7 @@ const DoodleCanvas = ({
     return () => {
       window.removeEventListener('beforeunload', warn);
     };
-  }, [lines]);
+  }, [lines.length]);
 
   const handleMouseDown = e => {
     setIsDrawing(true);
@@ -137,6 +162,8 @@ DoodleCanvas.propTypes = {
   lines: propTypes.array.isRequired,
   setLines: propTypes.func.isRequired,
   attachedElement: propTypes.any.isRequired,
+  onUndo: propTypes.func.isRequired,
+  onRedo: propTypes.func.isRequired,
 };
 
 export { DoodleCanvas };

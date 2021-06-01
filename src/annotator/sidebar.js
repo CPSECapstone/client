@@ -138,6 +138,8 @@ export default class Sidebar extends Guest {
       setDoodlesVisible: show => this.setAllVisibleDoodles(show),
       setUserCanDoodle: show => this.setAllDoodleability(show),
       setDoodleOptions: options => this.setAllDoodleOptions(options),
+      undoDoodle: () => this.undoDoodle(),
+      redoDoodle: () => this.redoDoodle(),
       saveDoodle: () => this.saveDoodle(),
     });
     this.toolbar.useMinimalControls = config.theme === 'clean';

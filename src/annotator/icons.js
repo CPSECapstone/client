@@ -19,6 +19,8 @@ export default {
   close: require('../images/icons/close.svg'),
   pen: require('../images/icons/pen.svg'),
   erase: require('../images/icons/erase.svg'),
+  undo: require('../images/icons/undo.svg'),
+  redo: require('../images/icons/redo.svg'),
   save: require('../images/icons/save.svg'),
   'circle-small': require('../images/icons/circleSmall.svg'),
   'circle-medium': require('../images/icons/circleMedium.svg'),
