@@ -16,8 +16,9 @@ import { watch } from '../util/watch';
 export function formatAnnot(ann) {
   function hashColor(s) {
     let h = 0;
-    for (let i = 0; i < s.length; i++)
-      {h = (Math.imul(31, h) + s.charCodeAt(i)) | 0;}
+    for (let i = 0; i < s.length; i++) {
+      h = (Math.imul(31, h) + s.charCodeAt(i)) | 0;
+    }
 
     return `#${Math.abs(h).toString(16).padStart(6, '0').substr(0, 6)}`;
   }
