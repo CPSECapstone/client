@@ -14,12 +14,20 @@ import { watch } from '../util/watch';
  * within the current session and anchor it in the document.
  */
 export function formatAnnot(ann) {
+  function hashColor(s) {
+    let h = 0;
+    for (let i = 0; i < s.length; i++)
+      {h = (Math.imul(31, h) + s.charCodeAt(i)) | 0;}
+
+    return `#${Math.abs(h).toString(16).padStart(6, '0').substr(0, 6)}`;
+  }
   return {
     tag: ann.$tag,
     msg: {
       document: ann.document,
       target: ann.target,
       uri: ann.uri,
+      $color: hashColor(ann.user),
     },
   };
 }
