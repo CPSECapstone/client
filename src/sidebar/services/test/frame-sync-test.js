@@ -233,7 +233,7 @@ describe('sidebar/services/frame-sync', function () {
       });
 
       it('should not create an annotation in the sidebar', () => {
-        const ann = { target: [] };
+        const ann = { target: [], user: 'acct:test@hypothes.is' };
 
         fakeBridge.emit('beforeCreateAnnotation', { tag: 't1', msg: ann });
 
@@ -241,21 +241,21 @@ describe('sidebar/services/frame-sync', function () {
       });
 
       it('should open the sidebar', () => {
-        const ann = { target: [] };
+        const ann = { target: [], user: 'acct:test@hypothes.is' };
         fakeBridge.emit('beforeCreateAnnotation', { tag: 't1', msg: ann });
 
         assert.calledWith(fakeBridge.call, 'showSidebar');
       });
 
       it('should open the login prompt panel', () => {
-        const ann = { target: [] };
+        const ann = { target: [], user: 'acct:test@hypothes.is' };
         fakeBridge.emit('beforeCreateAnnotation', { tag: 't1', msg: ann });
 
         assert.calledWith(fakeStore.openSidebarPanel, 'loginPrompt');
       });
 
       it('should send a "deleteAnnotation" message to the frame', () => {
-        const ann = { target: [] };
+        const ann = { target: [], user: 'acct:test@hypothes.is' };
         fakeBridge.emit('beforeCreateAnnotation', { tag: 't1', msg: ann });
 
         assert.calledWith(fakeBridge.call, 'deleteAnnotation');
