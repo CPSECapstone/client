@@ -31,6 +31,7 @@
  * @prop {string} uri
  * @prop {Target[]} target
  * @prop {string} $tag
+ * @prop {string} $color - What color to display the highlight in? This corresponds to the user who created the annotation.
  * @prop {boolean} [$doodle] -
  *   Flag indicating that this annotation is a doodle
  * @prop {DoodleLine[]} [doodleLines] -

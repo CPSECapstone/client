@@ -474,7 +474,7 @@ export default class Guest extends Delegator {
 
       const highlights = /** @type {AnnotationHighlight[]} */ (highlightRange(
         range,
-        Math.random() * (6 - 1) + 1
+        annotation.$color
       ));
       highlights.forEach(h => {
         h._annotation = anchor.annotation;
