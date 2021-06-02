@@ -9,12 +9,19 @@ export class DoodleController {
    */
   constructor(container, options, handleDoodleClick) {
     const { tool, size, color } = options;
+    /** @type {import('../types/api').DoodleLine[]} */
+
     this._lines = [];
+    /** @type {import('../types/api').Doodle[]} */
+
     this._savedDoodles = [];
+    /** @type {import('../types/api').DoodleLine[]} */
     this._newLines = [];
+    /** @type {import('../types/api').DoodleLine[]} */
+
     this._redoLines = [];
 
-    this._container = container === null ? document.body : container;
+    this.container = container === null ? document.body : container;
     this._tool = tool;
     this._size = size;
     this._color = color;
@@ -107,12 +114,14 @@ export class DoodleController {
 
   undo() {
     if (this._newLines.length) {
+      // @ts-ignore shift won't return undefined due to length check
       this._redoLines.push(this._newLines.shift());
       this.render();
     }
   }
   redo() {
     if (this._redoLines.length) {
+      // @ts-ignore pop won't return undefined due to length check
       this._newLines = [this._redoLines.pop(), ...this._newLines];
       this.render();
     }
@@ -125,7 +134,7 @@ export class DoodleController {
     render(
       <Fragment>
         <DoodleCanvas
-          attachedElement={this._container}
+          attachedElement={this.container}
           size={this._size}
           tool={this._tool}
           active={this._doodleable}
@@ -138,7 +147,7 @@ export class DoodleController {
         <DisplayCanvas
           handleDoodleClick={this._handleDoodleClick}
           doodles={this.savedDoodles}
-          container={this._container}
+          container={this.container}
           showDoodles={this._showDoodles}
         />
       </Fragment>,
