@@ -30,4 +30,6 @@ export default {
   'green-icon': require('../images/icons/green.svg'),
   'color-icon': require('../images/icons/palette.svg'),
   'sizes-icon': require('../images/icons/sizes.svg'),
+  showDoodle: require('../images/icons/showDoodle.svg'),
+  hideDoodle: require('../images/icons/hideDoodle.svg'),
 };

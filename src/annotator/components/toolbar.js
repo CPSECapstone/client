@@ -186,7 +186,7 @@ export default function Toolbar({
             />
             <ToolbarButton
               label="Show Doodles"
-              icon={showDoodles ? 'show' : 'hide'}
+              icon={showDoodles ? 'showDoodle' : 'hideDoodle'}
               selected={showDoodles}
               onClick={toggleDoodles}
             />
