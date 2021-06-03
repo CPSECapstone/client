@@ -20,7 +20,6 @@ export function formatAnnot(ann) {
       h = (Math.imul(31, h) + s.charCodeAt(i)) | 0;
     }
     return `hsl(${Math.abs(h) % 360}, 100%, 85%)`;
-    // return `#${Math.abs(h).toString(16).padStart(6, '0').substr(0, 6)}`;
   }
   return {
     tag: ann.$tag,
