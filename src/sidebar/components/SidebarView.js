@@ -7,6 +7,8 @@ import { withServices } from '../service-context';
 import { useStoreProxy } from '../store/use-store';
 import { tabForAnnotation } from '../helpers/tabs';
 
+import { useUserFilterOptions } from './hooks/use-filter-options';
+
 import FilterStatus from './FilterStatus';
 import LoggedOutMessage from './LoggedOutMessage';
 import LoginPromptPanel from './LoginPromptPanel';
@@ -45,6 +47,19 @@ function SidebarView({
   const isLoading = store.isLoading();
   const isLoggedIn = store.isLoggedIn();
 
+  // CreativeNTR
+  const userFilterOptions = useUserFilterOptions();
+  let users = [];
+  userFilterOptions.forEach(u => {
+    users.push('acct:'.concat(u.value).concat('@hypothes.is'));
+  });
+  //console.log(users);
+
+  // get annotation ids (testing using just smjaques, must be in 'acct:~~~@hypothes.is' format)
+  //const annot = store.findAnnotationsByUser('acct:smjaques@hypothes.is');
+
+  //console.log("Annotations",annot);
+
   const linkedAnnotationId = store.directLinkedAnnotationId();
   const linkedAnnotation = linkedAnnotationId
     ? store.findAnnotationByID(linkedAnnotationId)
@@ -56,7 +71,6 @@ function SidebarView({
   const searchUris = store.searchUris();
   const sidebarHasOpened = store.hasSidebarOpened();
   const userId = store.profile().userid;
-  //WILLNOTE we can use this to hide/show for this user!
 
   // The local `$tag` of a direct-linked annotation; populated once it
   // has anchored: meaning that it's ready to be focused and scrolled to
