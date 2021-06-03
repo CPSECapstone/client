@@ -146,7 +146,7 @@ export default class Sidebar extends Guest {
 
     // Set up the canvases for displaying and creating doodles
     this.doodleCanvasController = new DoodleController(
-      document.getElementById('main-content'),
+      document.body,
       {
         tool: 'pen',
         size: 5,
