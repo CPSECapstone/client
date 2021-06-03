@@ -16,6 +16,8 @@ import {
 import * as rangeUtil from './range-util';
 import { SelectionObserver } from './selection-observer';
 import { normalizeURI } from './util/url';
+import { DoodleElementFinder } from '../doodle/doodledOver';
+import { xpathFromNode, nodeFromXPath } from './anchoring/xpath';
 
 /**
  * @typedef {import('../types/annotator').AnnotationData} AnnotationData
@@ -825,11 +827,29 @@ export default class Guest extends Delegator {
    */
   saveCurrentDoodle() {
     if (this.doodleCanvasController) {
+      const controller = this.doodleCanvasController;
+      const elemFinder = new DoodleElementFinder(controller.container);
+
+      this.doodleCanvasController.newLines.forEach(line => {
+        // Set attached elem info
+        const attachedElem = elemFinder.resolveLine(line);
+        const attachedRect = attachedElem.getBoundingClientRect();
+        line.elem.height = attachedRect.height;
+        line.elem.width = attachedRect.width;
+        line.elem.path = xpathFromNode(attachedElem, controller.container);
+        // Fix line points
+        const topOffset = attachedRect.top + document.documentElement.scrollTop;
+        const leftOffset =
+          attachedRect.left + document.documentElement.scrollLeft;
+        line.points = line.points.map(pts => [
+          pts[0] - leftOffset,
+          pts[1] - topOffset,
+        ]);
+      });
       this.createAnnotation({
         $doodle: true,
         doodleLines: this.doodleCanvasController.newLines,
       });
-      // removed clearing lines from here because of bug when you try to save unsuccessfully (b/c not logged in) clearing your doodle
     }
   }
 
@@ -848,6 +868,7 @@ export default class Guest extends Delegator {
     }
 
     //load the lines into our doodleCanvasController.
+    /** @type {import('../types/api').DoodleLine[]} */
     let newLines = [];
     for (let targ of doodleAnnotation.target) {
       for (let sel of targ.selector) {
@@ -856,6 +877,30 @@ export default class Guest extends Delegator {
         }
       }
     }
+    // Re-calculate global coordinates for new line
+
+    newLines.forEach(line => {
+      const attachedNode = nodeFromXPath(line.elem.path);
+      if (
+        attachedNode === null ||
+        attachedNode.nodeType !== Node.ELEMENT_NODE
+      ) {
+        return;
+      }
+      /** @type{Element} */
+      // @ts-ignore we just checked it's an element
+      const attachedElem = attachedNode;
+      const attachedRect = attachedElem.getBoundingClientRect();
+      const topOffset = attachedRect.top + document.documentElement.scrollTop;
+      const leftOffset =
+        attachedRect.left + document.documentElement.scrollLeft;
+      const xMult = attachedRect.width / line.elem.width;
+      const yMult = attachedRect.height / line.elem.height;
+      line.points = line.points.map(([x, y]) => {
+        return [x * xMult + leftOffset, y * yMult + topOffset];
+      });
+    });
+
     this.doodleCanvasController.savedDoodles = [
       ...this.doodleCanvasController.savedDoodles,
       {

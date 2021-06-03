@@ -46,10 +46,17 @@
  */
 
 /**
+ * @typedef DoodleElem
+ * @prop {string} path
+ * @prop {number} height
+ * @prop {number} width
+ */
+/**
  * @typedef DoodleLine
  * @prop {string} tool
  * @prop {string} color
- * @prop {string} size
+ * @prop {number} size
+ * @prop {DoodleElem} elem
  * @prop {Array<Array<number>>} points
  */
 

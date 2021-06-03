@@ -11,9 +11,9 @@ import propTypes from 'prop-types';
  * @prop {string} color - The color of the brush
  * @prop {HTMLElement} attachedElement - Which element the DoodleCanvas should cover.
  * @prop {Array<import('../types/api').DoodleLine>} lines - An array of lines that compose this doodle.
- * @prop {Function} setLines - A function to set the lines
- * @prop {Function} onUndo - a function called when undo key commands pressed
- * @prop {Function} onRedo - a function called when redo key commands pressed
+ * @prop {(lines: import('../types/api').DoodleLine[]) => void} setLines - A function to set the lines
+ * @prop {() => void} onUndo - a function called when undo key commands pressed
+ * @prop {() => void} onRedo - a function called when redo key commands pressed
  */
 
 /**
@@ -84,6 +84,11 @@ const DoodleCanvas = ({
         tool: tool,
         color: color,
         size: size,
+        elem: {
+          path: '',
+          height: 0,
+          width: 0,
+        },
         points: [[e.offsetX, e.offsetY]],
       },
       ...lines,
@@ -109,10 +114,9 @@ const DoodleCanvas = ({
     const xPos = e.offsetX;
     const yPos = e.offsetY;
 
+    /** @type {import('../types/annotator').DoodleLine} */
     const newLine = {
-      tool: curLine.tool,
-      color: curLine.color,
-      size: curLine.size,
+      ...curLine,
       points: [[xPos, yPos], ...curLine.points],
     };
 

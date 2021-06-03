@@ -1,5 +1,18 @@
-const IGNORE_PERCENT_THRESHOLD = 0.8; // Ignore elements that cover at least this % of the region
+const APPEARANCE_THRESHOLD = 0.75; // How much of a line needs to appear in that element to consider it
+
+const IGNORE_PERCENT_THRESHOLD = 0.5; // Ignore elements that cover at least this % of the region
 const SPLIT_SIZE = 10; // Split into 2 sub regions (vertically, horizontal shouldn't be common) when one contains this many elements
+
+/**
+ * Gets the area of the element
+ * @param {Element} elem
+ * @returns {number}
+ */
+function getArea(elem) {
+  return (
+    elem.getBoundingClientRect().width * elem.getBoundingClientRect().height
+  );
+}
 
 /**
  * Gets the top of the element, in pixels relative to the page.
@@ -55,22 +68,19 @@ class PointResolver {
     if (minorElems.length < SPLIT_SIZE) {
       this.elements = this.elements.concat(minorElems);
     } else {
-      // Need to go to sub resolvers for minor elements. Just sort + take half in each
-      const sorted = minorElems.sort(
-        (a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top
+      // Need to go to sub resolvers for minor elements.
+      const midpoint = (top + bottom) / 2;
+      const firstHalf = elements.filter(e => elemTop(e) < midpoint);
+      const secondHalf = elements.filter(
+        e =>
+          e.getBoundingClientRect().bottom +
+            document.documentElement.scrollTop >=
+          midpoint
       );
-      const midway = Math.floor(sorted.length / 2);
+
       this.subResolvers = [
-        new PointResolver(
-          sorted.slice(0, midway),
-          top,
-          elemTop(sorted[midway])
-        ),
-        new PointResolver(
-          sorted.slice(midway, sorted.length),
-          elemTop(sorted[midway]) + 1,
-          bottom
-        ),
+        new PointResolver(firstHalf, top, midpoint),
+        new PointResolver(secondHalf, midpoint + 1, bottom),
       ];
     }
   }
@@ -147,16 +157,33 @@ export class DoodleElementFinder {
   /**
    * Returns all Elements that the line overlaps
    * @param {import("../types/api").DoodleLine} line
-   * @returns {Element[]}
+   * @returns {Element}
    */
   resolveLine(line) {
-    // Resolve for each point in the line, removing duplicates.
-    // In a later sprint we can revisit this and potentially ignore some elements that aren't common
-    // but for now, this is good enough.
-    let elems = new Set();
+    // Map from element to count of times that element has been doodled over
+    /** @type {Map<Element, number>}  */
+    let elems = new Map();
     line.points.forEach(point => {
-      this.resolvePoint(point[0], point[1]).forEach(elems.add);
+      this.resolvePoint(point[0], point[1]).forEach(elem => {
+        if (!elems.has(elem)) {
+          elems.set(elem, 0);
+        }
+        // @ts-ignore .get() can't be undefined, as we just set it.
+        elems.set(elem, elems.get(elem) + 1);
+      });
     });
-    return Array.from(elems);
+    // Sort elements by appearance count, largest to smallest
+    const sortedElems = Array.from(elems.entries()).sort((a, b) => b[1] - a[1]);
+    // Get ones that appear enough times, and map back down to only element, removing count
+    const overAppearanceThreshold = sortedElems
+      .filter(entry => entry[1] >= APPEARANCE_THRESHOLD * line.points.length)
+      .map(elem => elem[0]);
+    if (overAppearanceThreshold.length === 0) {
+      return sortedElems[0][0];
+    }
+
+    return overAppearanceThreshold.reduce((prev, curr) => {
+      return getArea(prev) <= getArea(curr) ? prev : curr;
+    }, overAppearanceThreshold[0]);
   }
 }
