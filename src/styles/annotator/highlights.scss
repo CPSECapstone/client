@@ -6,6 +6,12 @@
   fill: transparent;
 }
 
+.hypothesis-highlights-hidden {
+  .hypothesis-highlight {
+    background-color: transparent !important;
+  }
+}
+
 // `hypothesis-highlights-always-on` is a class that is toggled on the root
 // of the annotated document when highlights are enabled/disabled.
 .hypothesis-highlights-always-on {

@@ -357,6 +357,7 @@ export function setHighlightsFocused(highlights, focused) {
 export function setHighlightsVisible(root, visible) {
   const showHighlightsClass = 'hypothesis-highlights-always-on';
   root.classList.toggle(showHighlightsClass, visible);
+  root.classList.toggle('hypothesis-highlights-hidden', !visible);
 }
 
 /**
