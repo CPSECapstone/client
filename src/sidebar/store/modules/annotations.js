@@ -86,7 +86,6 @@ function initializeAnnotation(annotation, tag) {
     $anchorTimeout: false,
     $tag: annotation.$tag || tag,
     $orphan: orphan,
-    $doodle: annotation.$doodle,
   });
 }
 

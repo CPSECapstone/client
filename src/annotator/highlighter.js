@@ -212,13 +212,13 @@ function wholeTextNodesInRange(range) {
  * element of the specified class and returns the highlight Elements.
  *
  * @param {Range} range - Range to be highlighted
- * @param {Number} colorNum - number to index color list
+ * @param {String} color - What color to display the annotation in
  * @param {string} cssClass - A CSS class to use for the highlight
  * @return {HighlightElement[]} - Elements wrapping text in `normedRange` to add a highlight effect
  */
 export function highlightRange(
   range,
-  colorNum,
+  color,
   cssClass = 'hypothesis-highlight'
 ) {
   const textNodes = wholeTextNodesInRange(range);
@@ -265,11 +265,7 @@ export function highlightRange(
     /** @type {HighlightElement} */
     const highlightEl = document.createElement('hypothesis-highlight');
     highlightEl.className = cssClass;
-    //here is where we can call another function to get the color for the user
-    //color-->index number in the 'user-color' class
-    if (colorNum !== -1) {
-      highlightEl.classList.toggle('user-color' + Math.round(colorNum), true);
-    }
+    highlightEl.style.backgroundColor = color;
 
     nodes[0].parentNode.replaceChild(highlightEl, nodes[0]);
     nodes.forEach(node => highlightEl.appendChild(node));
@@ -361,6 +357,7 @@ export function setHighlightsFocused(highlights, focused) {
 export function setHighlightsVisible(root, visible) {
   const showHighlightsClass = 'hypothesis-highlights-always-on';
   root.classList.toggle(showHighlightsClass, visible);
+  root.classList.toggle('hypothesis-highlights-hidden', !visible);
 }
 
 /**
